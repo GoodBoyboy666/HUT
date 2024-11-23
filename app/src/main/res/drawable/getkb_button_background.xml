@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true" android:drawable="@drawable/hut_getkb_button_down" /> <!-- 按下时的背景 -->
+    <item android:state_pressed="false" android:drawable="@drawable/hut_getkb_button_up" /> <!-- 默认背景 -->
+</selector>

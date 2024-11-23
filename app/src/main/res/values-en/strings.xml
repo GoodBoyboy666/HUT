@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Hut class schedule</string>
+    <string name="get_kb_button_name">Get the class schedule</string>
+    <string name="user_hint">Please enter your student number</string>
+    <string name="passwd_hint">Please enter your password</string>
+    <string name="about">about</string>
+    <string name="log_output">Log output</string>
+    <string name="author_page">Author homepage</string>
+    <string name="choose_zhouci">Please select a week:</string>
+    <string name="loading">Loading…</string>
+    <string name="kb_item_string">Timetable Item</string>
+    <string name="thanks">Acknowledgement</string>
+    <string name="thanks_text">Material production: RudyCrane\n Software testing: victory 魏巍\n Special thanks: 3B铅笔 平平无奇比奇堡刁民</string>
+    <string name="OK">OK</string>
+    <string name="under_development">Under development</string>
+    <string name="user_name">User Name</string>
+    <string name="user_info">User Info</string>
+    <string name="logout">Logout</string>
+    <string name="login">Login</string>
+    <string name="string_schedule">Schedule</string>
+    <string name="string_tool">Tools</string>
+    <string name="string_me">Me</string>
+    <string name="cache_kb">Downloading class schedule, please wait...</string>
+    <string name="cache_kb_placeholder">Downloading class schedule, please wait...%s</string>
+    <string name="clean_kb_cache">Re cache the schedule</string>
+    <string name="choose_API">Please select a API</string>
+</resources>

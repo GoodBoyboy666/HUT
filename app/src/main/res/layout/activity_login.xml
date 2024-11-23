@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".LoginActivity">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <ImageView
+                android:id="@+id/user_avatar"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="100dp"
+                android:src="@mipmap/ic_launcher" />
+
+            <EditText
+                android:id="@+id/user_num"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:autofillHints="username"
+                android:hint="@string/user_hint"
+                android:inputType="number"
+                android:padding="20dp" />
+
+            <EditText
+                android:id="@+id/user_passwd"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:autofillHints="password"
+                android:hint="@string/passwd_hint"
+                android:inputType="textPassword"
+                android:padding="20dp" />
+
+            <LinearLayout
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="20sp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:maxLength="10"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="@string/choose_API" />
+
+                <Spinner
+                    android:id="@+id/choose_API"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/button_login"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:text="@string/login" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/progress_relativeLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="#80000000"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:visibility="gone">
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_margin="20dp" />
+
+            <TextView
+                android:id="@+id/progressText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/progressBar"
+                android:layout_centerHorizontal="true"
+                android:layout_margin="20dp"
+                android:text="@string/loading"
+                android:textSize="16sp" />
+        </RelativeLayout>
+    </FrameLayout>
+</LinearLayout>

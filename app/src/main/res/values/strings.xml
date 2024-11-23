@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">HUT课表</string>
+    <string name="get_kb_button_name">获取课表</string>
+    <string name="user_hint">请输入学号</string>
+    <string name="passwd_hint">请输入密码</string>
+    <string name="about">关于</string>
+
+    <string name="log_output">日志输出</string>
+    <string name="author_page">作者主页</string>
+    <string name="choose_zhouci">请选择周次：</string>
+    <string name="loading">加载中…</string>
+    <string name="kb_item_string">课表item项</string>
+    <string name="thanks">鸣谢</string>
+    <string name="thanks_text">素材制作：RudyCrane\n 测试：victory 魏巍\n 特别鸣谢: 3B铅笔 平平无奇比奇堡刁民
+    </string>
+    <string name="OK">确定</string>
+    <string name="under_development">正在开发</string>
+    <string name="user_name">用户名</string>
+    <string name="user_info">个人信息</string>
+    <string name="logout">退出登录</string>
+    <string name="login">登录</string>
+    <string name="string_schedule">课表</string>
+    <string name="string_tool">工具</string>
+    <string name="string_me">我的</string>
+    <string name="cache_kb">正在下载课表，请稍候…</string>
+    <string name="cache_kb_placeholder">正在下载课表，请稍候…%s</string>
+    <string name="clean_kb_cache">重新缓存课表</string>
+    <string name="choose_API">请选择线路：</string>
+    <string name="about_info" translatable="false">内部测试版本0.0.10\nWritten by GoodBoyboy</string>
+</resources>

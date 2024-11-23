@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="ButtonStyle" >
+        <item name="android:background">@drawable/getkb_button_background</item>
+    </style>
+    <style name="AlertDialogCustomStyle" parent="ThemeOverlay.AppCompat.Dialog.Alert">
+        <item name="android:fontFamily">@font/minecraft</item>
+    </style>
+    <style name="AppTheme.Toolbar" parent="Widget.AppCompat.Toolbar">
+        <item name="android:background">@drawable/hut_main_kb_background</item>
+    </style>
+</resources>

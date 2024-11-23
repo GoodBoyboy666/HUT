@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/kb_header"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:fontFamily="@font/minecraft"
+        android:textStyle="bold"
+        android:padding="10dp"
+        android:layout_margin="5dp"
+        android:letterSpacing="0.05"
+        android:lineSpacingExtra="5dp"
+        android:text="@string/kb_item_string"/>
+</LinearLayout>
