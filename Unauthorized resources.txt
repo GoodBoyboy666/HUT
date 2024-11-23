@@ -1,0 +1,5 @@
+下列清单中的资源未经授权，在本项目仅用于学习用途
+
+/app/src/main/res/font/minecraft.ttf
+
+/app/src/main/java/top/goodboyboy/hut/UncaughtException.kt

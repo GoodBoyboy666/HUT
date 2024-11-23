@@ -1,0 +1,15 @@
+下列清单中的资源仅被授权于`HUT`本项目，请勿用于其他项目
+
+/app/src/main/res/drawable-nodpi/bottom_background.png
+/app/src/main/res/drawable-nodpi/hut_getkb_button_down.png
+/app/src/main/res/dradrawable-nodpi/hut_getkb_button_up.png
+/app/src/main/res/drawable-nodpi/hut_getkb_button.png
+/app/src/main/res/drawable-nodpi/hut_kb_about.png
+/app/src/main/res/drawable-nodpi/hut_main_kb_background.png
+/app/src/main/res/drawable-nodpi/hut_nav_bar.png
+/app/src/main/res/drawable-nodpi/info_border.png
+/app/src/main/res/drawable-nodpi/kb1.png
+/app/src/main/res/drawable-nodpi/kb2.png
+/app/src/main/res/drawable-nodpi/kb3.png
+/app/src/main/res/drawable-nodpi/kb_ok.png
+/app/src/main/res/drawable-nodpi/no_border.png
