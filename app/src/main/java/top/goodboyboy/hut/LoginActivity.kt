@@ -41,36 +41,35 @@ class LoginActivity : AppCompatActivity() {
 
         //重新加载课表判定
         val extras = intent.extras
-        if (extras != null) {
-            val reCache = extras.getBoolean("ReCache")
-            if (reCache) {
-                binding.progressRelativeLayout.visibility = View.VISIBLE
-                val fileName = "settings.txt"
-                val file = File(internalStorageDir, fileName)
-                val userInfo = Gson().fromJson(file.readText(), SettingsClass::class.java)
-                binding.userNum.setText(userInfo.userNum)
-                binding.userPasswd.setText(userInfo.userPasswd)
-                GlobalStaticMembers.apiSelected = userInfo.selectedAPI
+        val reCache = extras?.getBoolean("ReCache") ?: false
+        if (reCache) {
+            binding.progressRelativeLayout.visibility = View.VISIBLE
+            val fileName = "settings.txt"
+            val file = File(internalStorageDir, fileName)
+            val userInfo = Gson().fromJson(file.readText(), SettingsClass::class.java)
+            binding.userNum.setText(userInfo.userNum)
+            binding.userPasswd.setText(userInfo.userPasswd)
+            GlobalStaticMembers.apiSelected = userInfo.selectedAPI
 
-                CoroutineScope(Dispatchers.Main).launch {
-                    val auth: AuthStatus
-                    withContext(Dispatchers.IO) {
-                        auth = checkLogin()
-                    }
-                    if (auth.status) {
-                        GlobalStaticMembers.client = auth.client
-                        binding.progressRelativeLayout.visibility = View.GONE
-                        val kbDir = internalStorageDir.path + "/kbs/"
-                        KbFunction.clearDirectory(File(kbDir))
-                        val intent = Intent(this@LoginActivity, CacheActivity::class.java)
-                        startActivity(intent)
-                    } else {
-                        binding.progressRelativeLayout.visibility = View.GONE
-                        Toast.makeText(this@LoginActivity, auth.reason, Toast.LENGTH_LONG).show()
-                    }
+            CoroutineScope(Dispatchers.Main).launch {
+                val auth: AuthStatus
+                withContext(Dispatchers.IO) {
+                    auth = checkLogin()
+                }
+                if (auth.status) {
+                    GlobalStaticMembers.client = auth.client
+                    binding.progressRelativeLayout.visibility = View.GONE
+                    val kbDir = internalStorageDir.path + "/kbs/"
+                    KbFunction.clearDirectory(File(kbDir))
+                    val intent = Intent(this@LoginActivity, CacheActivity::class.java)
+                    startActivity(intent)
+                } else {
+                    binding.progressRelativeLayout.visibility = View.GONE
+                    Toast.makeText(this@LoginActivity, auth.reason, Toast.LENGTH_LONG).show()
                 }
             }
-        } else {
+        }
+        else {
             //检测是否存在设置文件
             val fileName = "settings.txt"
             val file = File(internalStorageDir, fileName)
