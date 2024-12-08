@@ -101,7 +101,7 @@ class MainActivityPage : AppCompatActivity() {
                 showAlertDialog(
                     this,
                     getString(R.string.about),
-                    getString(R.string.about_info),
+                    getString(R.string.about_info,GlobalStaticMembers.VersionName),
                     isDarkMode
                 )
 
@@ -127,6 +127,14 @@ class MainActivityPage : AppCompatActivity() {
 
 
     companion object {
+        /**
+         * 显示提示框
+         *
+         * @param context 上下文
+         * @param title 标题
+         * @param message 内容
+         * @param isDark 是否暗色模式
+         */
         fun showAlertDialog(context: Context, title: String, message: String, isDark: Boolean) {
             val builder = AlertDialog.Builder(context)
             val inflater = LayoutInflater.from(context)

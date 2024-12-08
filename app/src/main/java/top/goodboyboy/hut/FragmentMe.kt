@@ -11,6 +11,9 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat.finishAffinity
 import androidx.fragment.app.Fragment
 import com.google.gson.Gson
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import top.goodboyboy.hut.databinding.FragmentMeBinding
 import java.io.File
 
@@ -42,6 +45,7 @@ class FragmentMe : Fragment() {
         binding.meButtonAuthorPage.setBackgroundResource(buttonBackground)
         binding.meButtonCleanCache.setBackgroundResource(buttonBackground)
         binding.meButtonLogout.setBackgroundResource(buttonBackground)
+        binding.meButtonCheckNew.setBackgroundResource(buttonBackground)
 
         binding.meButtonLogout.setOnClickListener {
             logoutFun()
@@ -50,7 +54,7 @@ class FragmentMe : Fragment() {
             MainActivityPage.showAlertDialog(
                 requireContext(),
                 getString(R.string.about),
-                getString(R.string.about_info),
+                getString(R.string.about_info,GlobalStaticMembers.VersionName),
                 isDarkMode
             )
         }
@@ -66,6 +70,27 @@ class FragmentMe : Fragment() {
             bundle.putBoolean("ReCache", true)
             intent.putExtras(bundle)
             startActivity(intent)
+        }
+
+        binding.meButtonCheckNew.setOnClickListener{
+            CoroutineScope(Dispatchers.Main).launch {
+                val status = CheckUpdate.getLatestVersionFromGitea()
+                if (status.isSuccess) {
+                    MainActivityPage.showAlertDialog(
+                        requireContext(),
+                        "检测到新版本" + status.versionInfo?.verName,
+                        status.versionInfo?.verBody ?: "未获取到更新说明",
+                        isDarkMode
+                    )
+                } else {
+                    MainActivityPage.showAlertDialog(
+                        requireContext(),
+                        "提示",
+                        status.reason ?: "检查更新失败！",
+                        isDarkMode
+                    )
+                }
+            }
         }
 
         val internalStorageDir = requireContext().filesDir

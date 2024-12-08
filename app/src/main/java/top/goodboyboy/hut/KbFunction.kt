@@ -458,7 +458,7 @@ class KbFunction {
          *
          * @return OkHttpClient对象
          */
-        fun getHttpClient(): OkHttpClient {
+        private fun getHttpClient(): OkHttpClient {
 
             val userAgentInterceptor = Interceptor { chain ->
                 val originalRequest = chain.request()
@@ -594,6 +594,13 @@ class KbItems
     var reason: String?
 )
 
+/**
+ * List格式存储的课表
+ *
+ * @property kbitems 课表信息
+ * @property isOk 是否完成
+ * @property reason 原因
+ */
 class KbItemsAsList
     (
     var kbitems: List<KbItem>?,
@@ -613,16 +620,36 @@ class KbItem
     var infos: String
 )
 
+/**
+ * 课表内容Item
+ *
+ * @property kbTitle
+ * @property kbInfo
+ */
 class GridAdapterItems
     (
     var kbTitle: List<String>?,
     var kbInfo: List<String>?
 )
 
+/**
+ * 表头Item
+ *
+ * @property header 表头
+ */
 class GridHeaderAdapterItems(
     val header: List<String>
 )
 
+/**
+ * Scode内容
+ *
+ * @property scode
+ * @property sxh
+ * @property isOk
+ * @property reason
+ * @property client
+ */
 class Scode(
     val scode: String?,
     val sxh: String?,

@@ -143,6 +143,11 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * 登录
+     *
+     * @return 登录状态对象
+     */
     private fun checkLogin(): AuthStatus {
 //        return MainFunction(MainFunction.getHttpClient(),this).authentication(binding.userNum.text.toString(),binding.userPasswd.text.toString())
         return KbFunction.authentication(

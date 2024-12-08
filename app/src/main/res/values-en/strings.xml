@@ -25,4 +25,5 @@
     <string name="cache_kb_placeholder">Downloading class schedule, please wait...%s</string>
     <string name="clean_kb_cache">Re cache the schedule</string>
     <string name="choose_API">Please select a API</string>
+    <string name="check_update">Check Updata</string>
 </resources>

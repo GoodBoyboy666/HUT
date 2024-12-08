@@ -71,6 +71,12 @@
                 android:text="@string/clean_kb_cache"
                 android:layout_margin="10dp"/>
             <Button
+                android:id="@+id/me_button_check_new"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/check_update"
+                android:layout_margin="10dp"/>
+            <Button
                 android:id="@+id/me_button_logout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

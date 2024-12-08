@@ -26,5 +26,6 @@
     <string name="cache_kb_placeholder">正在下载课表，请稍候…%s</string>
     <string name="clean_kb_cache">重新缓存课表</string>
     <string name="choose_API">请选择线路：</string>
-    <string name="about_info" translatable="false">内部测试版本0.0.10\nWritten by GoodBoyboy</string>
+    <string name="about_info" translatable="false">正式版本：v%s\nWritten by GoodBoyboy</string>
+    <string name="check_update">检测更新</string>
 </resources>

@@ -40,12 +40,14 @@ class CacheActivity : AppCompatActivity() {
             background = R.color.grey
         }
 
+        //设置背景
         binding.main.setBackgroundResource(background)
 
         if (authClient == null) {
             Toast.makeText(this, "获取Client出现异常，请联系开发人员！", Toast.LENGTH_LONG).show()
             finish()
         }
+        //开始缓存课表
         CoroutineScope(Dispatchers.Main + job).launch {
             withContext(Dispatchers.IO) {
                 authClient?.let { storeUserInfo(it) }
@@ -58,6 +60,11 @@ class CacheActivity : AppCompatActivity() {
 
     }
 
+    /**
+     * 缓存课表
+     *
+     * @param client 已完成身份验证的OkHttpClient
+     */
     private suspend fun cacheKb(client: OkHttpClient) {
         val allkbParam = KbFunction.getAllKbParam(
             client,
@@ -101,6 +108,14 @@ class CacheActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * 保存课表信息
+     *
+     * @param kb 课表Item
+     * @param zhouciSelected 已选择的周次
+     * @param kbjcmsid kbjcmsid
+     * @param xnxq01id xnxq01id
+     */
     private fun storeKb(kb: KbItems, zhouciSelected: String, kbjcmsid: String, xnxq01id: String) {
 
         val zhouKb = mutableListOf<KbItem>()
@@ -163,6 +178,14 @@ class CacheActivity : AppCompatActivity() {
 
     }
 
+    /**
+     * 缓存课表参数
+     *
+     * @param zhouci 周次信息
+     * @param kbjcmsid kbjcmsid
+     * @param xnxq01id xnxq01id
+     * @param zhouciSelected 已选择的周次
+     */
     private fun cacheKbParam(
         zhouci: List<String>,
         kbjcmsid: String,
@@ -190,6 +213,11 @@ class CacheActivity : AppCompatActivity() {
 
     }
 
+    /**
+     * 缓存用户信息
+     *
+     * @param client 已通过身份验证的OkHttpClient
+     */
     private fun storeUserInfo(client: OkHttpClient) {
         val userInfo = KbFunction.getUserInfo(
             client,
