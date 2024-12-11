@@ -12,6 +12,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import okhttp3.OkHttpClient
 import top.goodboyboy.hut.databinding.ActivityLoginBinding
 import java.io.File
 import java.io.FileWriter
@@ -39,50 +40,60 @@ class LoginActivity : AppCompatActivity() {
 
         val internalStorageDir = application.filesDir
 
-        //重新加载课表判定
-        val extras = intent.extras
-        val reCache = extras?.getBoolean("ReCache") ?: false
-        if (reCache) {
-            binding.progressRelativeLayout.visibility = View.VISIBLE
-            val fileName = "settings.txt"
-            val file = File(internalStorageDir, fileName)
-            val userInfo = Gson().fromJson(file.readText(), SettingsClass::class.java)
-            binding.userNum.setText(userInfo.userNum)
-            binding.userPasswd.setText(userInfo.userPasswd)
-            GlobalStaticMembers.apiSelected = userInfo.selectedAPI
+        //检测是否存在设置文件
+        binding.progressRelativeLayout.visibility = View.GONE
+        val fileName = "settings.txt"
+        val file = File(internalStorageDir, fileName)
 
-            CoroutineScope(Dispatchers.Main).launch {
-                val auth: AuthStatus
-                withContext(Dispatchers.IO) {
-                    auth = checkLogin()
-                }
-                if (auth.status) {
-                    GlobalStaticMembers.client = auth.client
-                    binding.progressRelativeLayout.visibility = View.GONE
-                    val kbDir = internalStorageDir.path + "/kbs/"
-                    KbFunction.clearDirectory(File(kbDir))
-                    val intent = Intent(this@LoginActivity, CacheActivity::class.java)
-                    startActivity(intent)
-                } else {
-                    binding.progressRelativeLayout.visibility = View.GONE
-                    Toast.makeText(this@LoginActivity, auth.reason, Toast.LENGTH_LONG).show()
-                }
-            }
-        }
-        else {
-            //检测是否存在设置文件
-            val fileName = "settings.txt"
-            val file = File(internalStorageDir, fileName)
-            val userInfo: String
-            if (file.exists()) {
-                userInfo = file.readText()
-                if (userInfo != "") {
+        if (file.exists()) {
+            val fileText = file.readText()
+            if (fileText != "") {
+                val settings = Gson().fromJson(file.readText(), SettingsClass::class.java)
+                binding.userNum.setText(settings.userNum)
+                binding.userPasswd.setText(settings.userPasswd)
+                GlobalStaticMembers.apiSelected = settings.selectedAPI
+
+                //检测是否为更新缓存
+                if (!settings.reCache) {
                     val intent = Intent(this, MainActivityPage::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                     startActivity(intent)
                 }
             }
         }
+
+
+//            CoroutineScope(Dispatchers.Main).launch {
+//                val auth: AuthStatus
+//                withContext(Dispatchers.IO) {
+//                    auth = checkLogin()
+//                }
+//                if (auth.status) {
+//                    GlobalStaticMembers.client = auth.client
+//                    binding.progressRelativeLayout.visibility = View.GONE
+//                    val kbDir = internalStorageDir.path + "/kbs/"
+//                    KbFunction.clearDirectory(File(kbDir))
+//                    val intent = Intent(this@LoginActivity, CacheActivity::class.java)
+//                    startActivity(intent)
+//                } else {
+//                    binding.progressRelativeLayout.visibility = View.GONE
+//                    Toast.makeText(this@LoginActivity, auth.reason, Toast.LENGTH_LONG).show()
+//                }
+//            }
+
+
+//            val fileName = "settings.txt"
+//            val file = File(internalStorageDir, fileName)
+//            val userInfo: String
+//            if (file.exists()) {
+//                userInfo = file.readText()
+//                if (userInfo != "") {
+//                    val intent = Intent(this, MainActivityPage::class.java)
+//                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+//                    startActivity(intent)
+//                }
+//            }
+
 
         //初始化线路选择
         val spinnerAdapter =
@@ -105,39 +116,73 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
+        var codeList = Scode(null, null, false, null, null)
+        CoroutineScope(Dispatchers.IO).launch {
+            codeList =
+                KbFunction.getScode(GlobalStaticMembers.jwxtAPI[GlobalStaticMembers.apiSelected])
+
+            if (codeList.isOk && codeList.client != null) {
+                val captcha = KbFunction.getCaptcha(
+                    GlobalStaticMembers.jwxtAPI[GlobalStaticMembers.apiSelected],
+                    codeList.client!!
+                )
+                withContext(Dispatchers.Main) {
+                    binding.captchaImage.setImageBitmap(captcha.image)
+                }
+            } else {
+                Toast.makeText(this@LoginActivity, codeList.reason, Toast.LENGTH_LONG).show()
+            }
+
+        }
+
+        binding.captchaImage.setOnClickListener {
+            CoroutineScope(Dispatchers.IO).launch {
+                val captcha = KbFunction.getCaptcha(
+                    GlobalStaticMembers.jwxtAPI[GlobalStaticMembers.apiSelected],
+                    codeList.client!!
+                )
+                withContext(Dispatchers.Main) {
+                    binding.captchaImage.setImageBitmap(captcha.image)
+                }
+            }
+        }
 
         //登录按钮事件绑定
         binding.buttonLogin.setOnClickListener {
             binding.progressRelativeLayout.visibility = View.VISIBLE
 
-            KbFunction.clearDirectory(internalStorageDir)
+//            KbFunction.clearDirectory(internalStorageDir)
 
-            CoroutineScope(Dispatchers.Main).launch {
-                val auth: AuthStatus
-                withContext(Dispatchers.IO) {
-                    auth = checkLogin()
-                }
-                if (auth.status) {
-                    //将账号密码与设置写入文件
-                    GlobalStaticMembers.client = auth.client
-                    binding.progressRelativeLayout.visibility = View.GONE
+            if (!codeList.scode.isNullOrBlank() && !codeList.sxh.isNullOrBlank() && codeList.client != null) {
 
-                    val settingsClass = SettingsClass(
-                        binding.userNum.text.toString(),
-                        binding.userPasswd.text.toString(),
-                        selectedAPI = binding.chooseAPI.selectedItemPosition
-                    )
+                CoroutineScope(Dispatchers.Main).launch {
+                    val auth: AuthStatus
+                    withContext(Dispatchers.IO) {
+                        auth = checkLogin(codeList.scode!!, codeList.sxh!!,binding.verificationCode.text.toString(),codeList.client!!)
+                    }
+                    if (auth.status) {
+                        //将账号密码与设置写入文件
+                        GlobalStaticMembers.client = auth.client
+                        binding.progressRelativeLayout.visibility = View.GONE
 
-                    val fileName = "settings.txt"
-                    val file = File(internalStorageDir, fileName)
-                    val writer = FileWriter(file, false)
-                    writer.write(Gson().toJson(settingsClass))
-                    writer.close()
-                    val intent = Intent(this@LoginActivity, CacheActivity::class.java)
-                    startActivity(intent)
-                } else {
-                    binding.progressRelativeLayout.visibility = View.GONE
-                    Toast.makeText(this@LoginActivity, auth.reason, Toast.LENGTH_LONG).show()
+                        val settingsClass = SettingsClass(
+                            binding.userNum.text.toString(),
+                            binding.userPasswd.text.toString(),
+                            selectedAPI = binding.chooseAPI.selectedItemPosition,
+                            reCache = false
+                        )
+
+                        val settingsName = "settings.txt"
+                        val settingsFile = File(internalStorageDir, settingsName)
+                        val writer = FileWriter(settingsFile, false)
+                        writer.write(Gson().toJson(settingsClass))
+                        writer.close()
+                        val intent = Intent(this@LoginActivity, CacheActivity::class.java)
+                        startActivity(intent)
+                    } else {
+                        binding.progressRelativeLayout.visibility = View.GONE
+                        Toast.makeText(this@LoginActivity, auth.reason, Toast.LENGTH_LONG).show()
+                    }
                 }
             }
         }
@@ -148,12 +193,12 @@ class LoginActivity : AppCompatActivity() {
      *
      * @return 登录状态对象
      */
-    private fun checkLogin(): AuthStatus {
+    private fun checkLogin(scode: String, sxh: String,verificationCode:String, client: OkHttpClient): AuthStatus {
 //        return MainFunction(MainFunction.getHttpClient(),this).authentication(binding.userNum.text.toString(),binding.userPasswd.text.toString())
         return KbFunction.authentication(
             binding.userNum.text.toString(),
             binding.userPasswd.text.toString(),
-            GlobalStaticMembers.jwxtAPI[GlobalStaticMembers.apiSelected]
+            GlobalStaticMembers.jwxtAPI[GlobalStaticMembers.apiSelected], scode, sxh, client,verificationCode
         )
     }
 }

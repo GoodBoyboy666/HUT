@@ -28,4 +28,5 @@
     <string name="choose_API">请选择线路：</string>
     <string name="about_info" translatable="false">正式版本：v%s\nWritten by GoodBoyboy</string>
     <string name="check_update">检测更新</string>
+    <string name="captcha">验证码</string>
 </resources>

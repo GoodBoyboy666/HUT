@@ -1,12 +1,17 @@
 package top.goodboyboy.hut
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat.finishAffinity
 import androidx.fragment.app.Fragment
@@ -16,6 +21,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import top.goodboyboy.hut.databinding.FragmentMeBinding
 import java.io.File
+import java.io.FileWriter
 
 class FragmentMe : Fragment() {
     private var _binding: FragmentMeBinding? = null
@@ -33,7 +39,7 @@ class FragmentMe : Fragment() {
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        val internalStorageDir = requireContext().filesDir
         val isDarkMode = KbFunction.checkDarkMode(requireContext())
 
         var buttonBackground = R.drawable.hut_getkb_button
@@ -54,7 +60,7 @@ class FragmentMe : Fragment() {
             MainActivityPage.showAlertDialog(
                 requireContext(),
                 getString(R.string.about),
-                getString(R.string.about_info,GlobalStaticMembers.VersionName),
+                getString(R.string.about_info, GlobalStaticMembers.VersionName),
                 isDarkMode
             )
         }
@@ -66,20 +72,38 @@ class FragmentMe : Fragment() {
         binding.meButtonCleanCache.setOnClickListener {
             val intent = Intent(requireContext(), LoginActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            val bundle = Bundle()
-            bundle.putBoolean("ReCache", true)
-            intent.putExtras(bundle)
-            startActivity(intent)
+
+            val fileName = "settings.txt"
+            val file = File(internalStorageDir, fileName)
+
+            if (file.exists()) {
+                val fileText = file.readText()
+                if (fileText != "") {
+                    val settings = Gson().fromJson(file.readText(), SettingsClass::class.java)
+                    settings.reCache = true
+                    val writer = FileWriter(file, false)
+                    writer.write(Gson().toJson(settings))
+                    writer.close()
+                    startActivity(intent)
+                }
+            } else {
+                Toast.makeText(
+                    requireContext(),
+                    "配置文件不存在，请使用注销功能！",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
         }
 
-        binding.meButtonCheckNew.setOnClickListener{
+        binding.meButtonCheckNew.setOnClickListener {
             CoroutineScope(Dispatchers.Main).launch {
                 val status = CheckUpdate.getLatestVersionFromGitea()
                 if (status.isSuccess) {
-                    MainActivityPage.showAlertDialog(
+                    showNewVersionAlertDialog(
                         requireContext(),
                         "检测到新版本" + status.versionInfo?.verName,
                         status.versionInfo?.verBody ?: "未获取到更新说明",
+                        status.versionInfo?.verUrl ?: "https://git.goodboyboy.top/goodboyboy/HUT",
                         isDarkMode
                     )
                 } else {
@@ -93,7 +117,7 @@ class FragmentMe : Fragment() {
             }
         }
 
-        val internalStorageDir = requireContext().filesDir
+
         val fileName = "userInfo.txt"
         val file = File(internalStorageDir, fileName)
         if (file.exists()) {
@@ -123,5 +147,39 @@ class FragmentMe : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    fun showNewVersionAlertDialog(
+        context: Context,
+        title: String,
+        message: String,
+        url: String,
+        isDark: Boolean
+    ) {
+        val builder = AlertDialog.Builder(context)
+        val inflater = LayoutInflater.from(context)
+        val dialogView: View = inflater.inflate(R.layout.custom_dialog, null)
+        val dialog: LinearLayout = dialogView.findViewById(R.id.custom_alertdialog)
+        val titleTextView: TextView = dialogView.findViewById(R.id.dialog_title)
+        val messageTextView: TextView = dialogView.findViewById(R.id.dialog_message)
+        val positiveButton: Button = dialogView.findViewById(R.id.dialog_positiveButton)
+        var dialogBackground = R.drawable.info_border
+        var okBackground = R.drawable.kb_ok
+        titleTextView.text = title
+        messageTextView.text = message
+
+        if (isDark) {
+            dialogBackground = R.color.grey
+            okBackground = R.color.grey
+        }
+        dialog.setBackgroundResource(dialogBackground)
+        positiveButton.setBackgroundResource(okBackground)
+        builder.setView(dialogView)
+        val alertDialog = builder.create()
+        positiveButton.setOnClickListener {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+            startActivity(intent)
+        }
+        alertDialog.show()
     }
 }

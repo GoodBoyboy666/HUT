@@ -2,6 +2,7 @@ package top.goodboyboy.hut
 
 import android.content.Context
 import android.content.res.Configuration
+import android.graphics.BitmapFactory
 import android.util.Base64
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -30,9 +31,20 @@ class KbFunction {
          * @param userNum 学号
          * @param userPasswd 密码
          * @param api 教务系统接口
+         * @param scode scode
+         * @param sxh sxh
+         * @param client OkHttpClient
          * @return authStatus对象
          */
-        fun authentication(userNum: String, userPasswd: String, api: String): AuthStatus {
+        fun authentication(
+            userNum: String,
+            userPasswd: String,
+            api: String,
+            scode: String,
+            sxh: String,
+            client: OkHttpClient,
+            verificationCode:String
+        ): AuthStatus {
 
 //            val client = getHttpClient()
 
@@ -43,22 +55,23 @@ class KbFunction {
 //                ) + "%%%" + Base64.encodeToString(userPasswd.toByteArray(), Base64.NO_WRAP), "UTF-8"
 //            )
 
-            val codeGroup = getScode(api)
-            if (!codeGroup.isOk && codeGroup.client != null) {
-                return AuthStatus(false, codeGroup.reason ?: "", null)
-            }
-            val client = codeGroup.client
+//            val codeGroup = getScode(api)
+//            if (!codeGroup.isOk && codeGroup.client != null) {
+//                return AuthStatus(false, codeGroup.reason ?: "", null)
+//            }
+//            val client = codeGroup.client
+
             val encodedData = URLEncoder.encode(
                 encodeNumAndPasswd(
                     userNum,
                     userPasswd,
-                    codeGroup.scode ?: "",
-                    codeGroup.sxh ?: ""
+                    scode,
+                    sxh
                 ), "UTF-8"
             )
 
             val requestBodyString =
-                "loginMethod=LoginToXk&userlanguage=0&userAccount=${userNum}&userPassword=&encoded=${encodedData}"
+                "loginMethod=LoginToXk&userlanguage=0&userAccount=${userNum}&userPassword=&RANDOMCODE=${verificationCode}&encoded=${encodedData}"
 
             // 构建请求体
             val mediaType = "application/x-www-form-urlencoded".toMediaType()
@@ -73,9 +86,7 @@ class KbFunction {
             // 发送请求并获取响应
             var response: Response? = null
             try {
-                if (client != null) {
-                    response = client.newCall(request).execute()
-                }
+                response = client.newCall(request).execute()
             } catch (e: Exception) {
                 println(e.message)
             }
@@ -105,7 +116,7 @@ class KbFunction {
          * @param api 教务系统接口
          * @return scode对象
          */
-        private fun getScode(api: String): Scode {
+        fun getScode(api: String): Scode {
 
             val client = getHttpClient()
 
@@ -131,6 +142,21 @@ class KbFunction {
                 }
             }
             return Scode(null, null, false, "请求scode与sxh失败！", null)
+        }
+
+        fun getCaptcha(api: String, client: OkHttpClient): Captcha {
+            val request = Request.Builder()
+                .get()
+                .url("${api}jsxsd/verifycode.servlet")
+                .build()
+
+            val response = client.newCall(request).execute()
+            if (response.isSuccessful) {
+                val inputStream = response.body?.byteStream()
+                val bitmap = BitmapFactory.decodeStream(inputStream)
+                return Captcha(true, bitmap)
+            }
+            return Captcha(false, null)
         }
 
         /**
@@ -656,4 +682,9 @@ class Scode(
     val isOk: Boolean,
     val reason: String?,
     val client: OkHttpClient?
+)
+
+class Captcha(
+    val isOk: Boolean,
+    val image: android.graphics.Bitmap?,
 )

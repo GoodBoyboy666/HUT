@@ -48,6 +48,27 @@
             <LinearLayout
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <EditText
+                    android:id="@+id/verification_code"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:autofillHints="null"
+                    android:hint="@string/captcha"
+                    android:inputType="text"
+                    android:padding="20dp"/>
+                <ImageView
+                    android:id="@+id/captcha_image"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitXY"
+                    android:padding="10dp"
+                    android:contentDescription="@string/captcha" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:padding="20sp">
 
