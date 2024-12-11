@@ -101,7 +101,7 @@ class FragmentMe : Fragment() {
                 if (status.isSuccess) {
                     showNewVersionAlertDialog(
                         requireContext(),
-                        "检测到新版本" + status.versionInfo?.verName,
+                        "检测到新版本" +" "+ status.versionInfo?.verName,
                         status.versionInfo?.verBody ?: "未获取到更新说明",
                         status.versionInfo?.verUrl ?: "https://git.goodboyboy.top/goodboyboy/HUT",
                         isDarkMode

@@ -33,7 +33,7 @@ class CheckUpdate {
                             checkNum(jsonObj.get("name").asString, GlobalStaticMembers.VersionName)
                         if (newVersion) {
                             val verName = jsonObj.get("name").asString
-                            val verBody = jsonObj.get("body").asString
+                            val verBody = jsonObj.get("body").asString.replace("\r\n", "\n")
                             val verUrl = jsonObj.get("html_url").asString
                             return VersionStatus(true, VersionInfo(verName, verBody, verUrl), "")
                         } else {
