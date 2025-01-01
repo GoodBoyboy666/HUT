@@ -16,6 +16,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".Activity.BrowseActivity"
+            android:exported="false" />
+        <activity
             android:name=".Activity.CacheActivity"
             android:exported="false" />
         <activity
@@ -23,12 +26,13 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".Activity.MainActivityPage"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".Activity.Thanks"
             android:exported="false" />

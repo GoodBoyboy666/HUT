@@ -1,11 +1,9 @@
 package top.goodboyboy.hut.Adapter
 
 import android.content.Context
-import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.TextView
 
 class SpinnerAdapter(context: Context,
                      resource: Int,
