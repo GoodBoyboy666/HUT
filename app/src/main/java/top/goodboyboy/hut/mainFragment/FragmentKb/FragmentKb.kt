@@ -1,5 +1,6 @@
 package top.goodboyboy.hut.mainFragment.FragmentKb
 
+import android.R
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.Toast
+import androidx.compose.ui.graphics.Color
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.coroutines.SupervisorJob
@@ -17,6 +19,7 @@ import top.goodboyboy.hut.others.Hash
 import top.goodboyboy.hut.Adapter.KbAdapter
 import top.goodboyboy.hut.KbFunction
 import top.goodboyboy.hut.Adapter.KbHeaderAdapter
+import top.goodboyboy.hut.Adapter.SpinnerAdapter
 import top.goodboyboy.hut.KbItemsAsList
 import top.goodboyboy.hut.databinding.FragmentKbBinding
 
@@ -49,6 +52,7 @@ class FragmentKb : Fragment() {
 
         val isDarkMode = KbFunction.checkDarkMode(requireContext())
 
+
         //初始化课表View布局
         val gridView = binding.kbGrid
         val gridAdapterItems = GridAdapterItems(viewmodel.allitems, viewmodel.allinfos)
@@ -70,10 +74,9 @@ class FragmentKb : Fragment() {
         spinner = binding.zhouciSpinner
 
         val spinnerAdapter =
-            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, viewmodel.zhouci)
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            SpinnerAdapter(requireContext(), R.layout.simple_spinner_item, viewmodel.zhouci,isDarkMode)
+        spinnerAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item)
         spinner.adapter = spinnerAdapter
-
         spinner.setSelection(viewmodel.zhouciSelectedIndex)
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
@@ -86,6 +89,7 @@ class FragmentKb : Fragment() {
                 viewmodel.zhouciSelected = selectedItem
                 viewmodel.zhouciSelectedIndex = position
 //                loadKb(userNum, userPasswd)
+                loadKb()
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -104,10 +108,11 @@ class FragmentKb : Fragment() {
             loadKb()
         }
 
-        if (viewmodel.isFirst) {
-            viewmodel.isFirst = false
-            loadKb()
-        }
+//        if (viewmodel.isFirst) {
+//            viewmodel.isFirst = false
+//            loadKb()
+//        }
+        loadKb()
     }
 
 
@@ -129,11 +134,11 @@ class FragmentKb : Fragment() {
                     viewmodel.xnxq01id
         )
 
-        val kbitems = KbFunction.getKbFromFile(
+        val kbItems = KbFunction.getKbFromFile(
             internalStorageDir.path + "/kbs/" + fileName
         )
 
-        flushUI(kbitems)
+        flushUI(kbItems)
 
 
     }
@@ -141,10 +146,10 @@ class FragmentKb : Fragment() {
     /**
      * 刷新课表
      *
-     * @param kbitems kbItemsAsList对象
+     * @param kbItems kbItemsAsList对象
      */
-    private fun flushUI(kbitems: KbItemsAsList) {
-        if (kbitems.isOk) {
+    private fun flushUI(kbItems: KbItemsAsList) {
+        if (kbItems.isOk) {
 
             viewmodel.allitems.clear()
             viewmodel.allinfos.clear()
@@ -161,21 +166,21 @@ class FragmentKb : Fragment() {
 //                }
 //            }
 
-            for (item in kbitems.kbitems!!) {
+            for (item in kbItems.kbitems!!) {
                 viewmodel.allitems.add(item.title)
                 viewmodel.allinfos.add(item.infos)
             }
 
 
-            val spinnerAdapter = ArrayAdapter(
-                requireContext(),
-                android.R.layout.simple_spinner_item,
-                viewmodel.zhouci
-            )
-            spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            spinner.adapter = spinnerAdapter
-            spinner.setSelection(viewmodel.zhouciSelectedIndex)
-            spinnerAdapter.notifyDataSetChanged()
+//            val spinnerAdapter = ArrayAdapter(
+//                requireContext(),
+//                android.R.layout.simple_spinner_item,
+//                viewmodel.zhouci
+//            )
+//            spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+//            spinner.adapter = spinnerAdapter
+//            spinner.setSelection(viewmodel.zhouciSelectedIndex)
+//            spinnerAdapter.notifyDataSetChanged()
 
 
             adapter.notifyDataSetChanged()
@@ -186,7 +191,7 @@ class FragmentKb : Fragment() {
 
 //            binding.zhouciLinearLayout.visibility = View.VISIBLE
         } else {
-            Toast.makeText(requireContext(), kbitems.reason ?: "未知错误！", Toast.LENGTH_LONG)
+            Toast.makeText(requireContext(), kbItems.reason ?: "未知错误！", Toast.LENGTH_LONG)
                 .show()
         }
 

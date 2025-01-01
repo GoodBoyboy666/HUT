@@ -13,7 +13,7 @@ class FragmentKbViewModel(private val application: Application) : AndroidViewMod
     var allinfos = List(40) { "N/A" }.toMutableList()
     val kbHead =
         listOf("课表", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六", "星期日")
-    var isFirst = true
+//    var isFirst = true
 
     //    val message=MutableLiveData<String>()
     var zhouciSelectedIndex = 0
