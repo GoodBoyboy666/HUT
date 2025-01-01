@@ -1,4 +1,4 @@
-package top.goodboyboy.hut
+package top.goodboyboy.hut.Activity
 
 import android.content.Intent
 import android.os.Bundle
@@ -13,7 +13,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
+import top.goodboyboy.hut.AuthStatus
+import top.goodboyboy.hut.GlobalStaticMembers
+import top.goodboyboy.hut.KbFunction
+import top.goodboyboy.hut.R
+import top.goodboyboy.hut.Scode
+import top.goodboyboy.hut.SettingsClass
 import top.goodboyboy.hut.databinding.ActivityLoginBinding
+import top.goodboyboy.hut.others.UncaughtException
 import java.io.File
 import java.io.FileWriter
 
@@ -25,6 +32,7 @@ class LoginActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
+        //全局捕捉异常
         UncaughtException.getInstance(this)
 
         var pageBackground = R.drawable.hut_main_kb_background
@@ -135,6 +143,7 @@ class LoginActivity : AppCompatActivity() {
 
         }
 
+        //验证码刷新事件
         binding.captchaImage.setOnClickListener {
             CoroutineScope(Dispatchers.IO).launch {
                 val captcha = KbFunction.getCaptcha(
@@ -162,7 +171,7 @@ class LoginActivity : AppCompatActivity() {
                     }
                     if (auth.status) {
                         //将账号密码与设置写入文件
-                        GlobalStaticMembers.client = auth.client
+                        GlobalStaticMembers.client = codeList.client
                         binding.progressRelativeLayout.visibility = View.GONE
 
                         val settingsClass = SettingsClass(
@@ -198,7 +207,11 @@ class LoginActivity : AppCompatActivity() {
         return KbFunction.authentication(
             binding.userNum.text.toString(),
             binding.userPasswd.text.toString(),
-            GlobalStaticMembers.jwxtAPI[GlobalStaticMembers.apiSelected], scode, sxh, client,verificationCode
+            GlobalStaticMembers.jwxtAPI[GlobalStaticMembers.apiSelected],
+            scode,
+            sxh,
+            client,
+            verificationCode
         )
     }
 }

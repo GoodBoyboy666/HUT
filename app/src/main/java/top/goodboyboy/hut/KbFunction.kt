@@ -103,7 +103,7 @@ class KbFunction {
                     return if (authResultNode != null) {
                         AuthStatus(false, authResultNode.text())
                     } else {
-                        AuthStatus(true, "", client)
+                        AuthStatus(true, "")
                     }
                 }
             }
@@ -213,11 +213,11 @@ class KbFunction {
          */
         fun getKbData(client: OkHttpClient, api: String): KbItems {
 
-            val allkbParam = getAllKbParam(client, api)
+            val allKbParam = getAllKbParam(client, api)
 
-            if (allkbParam != null) {
+            if (allKbParam != null) {
 
-                val kb = getSchedule(client, allkbParam.kbURL)
+                val kb = getSchedule(client, allKbParam.kbURL)
                 return kb
             } else
                 return KbItems(null, false, "课表链接获取失败")
@@ -267,21 +267,21 @@ class KbFunction {
 
                     val kbParam: KbParam = getKbParam(responseBody)
                     if (kbParam.zhouciSelected.isNotBlank() && kbParam.kbjcmsid.isNotBlank() && kbParam.xnxq01id.isNotBlank() && kbParam.zhouci.isNotEmpty()) {
-                        val allkbParam = AllKbParam()
-                        allkbParam.zhouciSelected = kbParam.zhouciSelected
-                        allkbParam.zhouci =
+                        val allKbParam = AllKbParam()
+                        allKbParam.zhouciSelected = kbParam.zhouciSelected
+                        allKbParam.zhouci =
                             kbParam.zhouci.toList().filter { it.isNotEmpty() }.toMutableList()
-                        allkbParam.zhouciSelectedIndex =
+                        allKbParam.zhouciSelectedIndex =
                             kbParam.zhouci.indexOf(kbParam.zhouciSelected)
-                        allkbParam.kbjcmsid = kbParam.kbjcmsid
-                        allkbParam.xnxq01id = kbParam.xnxq01id
-                        allkbParam.kbURL = getKbURL(
+                        allKbParam.kbjcmsid = kbParam.kbjcmsid
+                        allKbParam.xnxq01id = kbParam.xnxq01id
+                        allKbParam.kbURL = getKbURL(
                             kbParam.zhouciSelected,
                             kbParam.kbjcmsid,
                             kbParam.xnxq01id,
                             api
                         )
-                        return allkbParam
+                        return allKbParam
                     }
 
                 }
@@ -329,13 +329,13 @@ class KbFunction {
             //获取xnxq01id
             val xnxq01id: List<Element>? = doc.select("select[lay-filter='xnxq'] option")
 
-            val KbParam = KbParam(
+            val kbParam = KbParam(
                 weeks,
                 kbjcmsid?.attr("data-value") ?: "",
                 xnxq01id?.firstOrNull()?.text() ?: "",
                 selected?.attr("value") ?: ""
             )
-            return KbParam
+            return kbParam
         }
 
         /**
@@ -554,6 +554,12 @@ class KbFunction {
             }
         }
 
+        /**
+         * 检测暗色模式
+         *
+         * @param context 上下文
+         * @return 是否为暗色模式
+         */
         fun checkDarkMode(context: Context): Boolean {
             val currentNightMode =
                 context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
@@ -569,13 +575,13 @@ class KbFunction {
  *
  * @property status 身份验证状态
  * @property reason 原因
- * @property client 已验证的OkHttpClient（失败情况下为null）
+// * @property client 已验证的OkHttpClient（失败情况下为null）
  */
 class AuthStatus
     (
     val status: Boolean,
     val reason: String,
-    val client: OkHttpClient? = null
+//    val client: OkHttpClient? = null
 ) : Serializable
 
 /**
@@ -684,6 +690,12 @@ class Scode(
     val client: OkHttpClient?
 )
 
+/**
+ * 验证码实体
+ *
+ * @property isOk 是否获取到验证码图片
+ * @property image 验证码图片
+ */
 class Captcha(
     val isOk: Boolean,
     val image: android.graphics.Bitmap?,

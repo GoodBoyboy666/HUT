@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".CacheActivity">
+    tools:context=".Activity.CacheActivity">
     <RelativeLayout
         android:id="@+id/cache_progress_relativeLayout"
         android:layout_width="match_parent"

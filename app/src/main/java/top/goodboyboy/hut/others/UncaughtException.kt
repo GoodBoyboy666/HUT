@@ -1,4 +1,4 @@
-package top.goodboyboy.hut
+package top.goodboyboy.hut.others
 
 import android.content.Context
 import android.content.Intent
@@ -8,6 +8,7 @@ import android.os.Looper
 import android.util.Log
 import android.widget.Toast
 import androidx.core.content.pm.PackageInfoCompat
+import top.goodboyboy.hut.Activity.ActivityLogViewer
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale

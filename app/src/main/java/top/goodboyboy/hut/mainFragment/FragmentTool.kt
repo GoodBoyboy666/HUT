@@ -1,4 +1,4 @@
-package top.goodboyboy.hut
+package top.goodboyboy.hut.mainFragment
 
 import android.os.Bundle
 import android.view.LayoutInflater

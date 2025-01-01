@@ -1,4 +1,4 @@
-package top.goodboyboy.hut
+package top.goodboyboy.hut.mainFragment
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
@@ -19,6 +19,14 @@ import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import top.goodboyboy.hut.CheckUpdate
+import top.goodboyboy.hut.GlobalStaticMembers
+import top.goodboyboy.hut.KbFunction
+import top.goodboyboy.hut.Activity.LoginActivity
+import top.goodboyboy.hut.Activity.MainActivityPage
+import top.goodboyboy.hut.R
+import top.goodboyboy.hut.SettingsClass
+import top.goodboyboy.hut.UserInfoClass
 import top.goodboyboy.hut.databinding.FragmentMeBinding
 import java.io.File
 import java.io.FileWriter

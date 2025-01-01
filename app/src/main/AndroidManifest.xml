@@ -16,10 +16,10 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".CacheActivity"
+            android:name=".Activity.CacheActivity"
             android:exported="false" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".Activity.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,13 +27,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivityPage"
+            android:name=".Activity.MainActivityPage"
             android:exported="false"/>
         <activity
-            android:name=".Thanks"
+            android:name=".Activity.Thanks"
             android:exported="false" />
         <activity
-            android:name=".ActivityLogViewer"
+            android:name=".Activity.ActivityLogViewer"
             android:exported="false"
             android:theme="@style/Theme.HUT" />
     </application>

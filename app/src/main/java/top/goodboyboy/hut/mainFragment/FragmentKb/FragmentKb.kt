@@ -1,4 +1,4 @@
-package top.goodboyboy.hut
+package top.goodboyboy.hut.mainFragment.FragmentKb
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,6 +11,13 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.coroutines.SupervisorJob
+import top.goodboyboy.hut.GridAdapterItems
+import top.goodboyboy.hut.GridHeaderAdapterItems
+import top.goodboyboy.hut.others.Hash
+import top.goodboyboy.hut.Adapter.KbAdapter
+import top.goodboyboy.hut.KbFunction
+import top.goodboyboy.hut.Adapter.KbHeaderAdapter
+import top.goodboyboy.hut.KbItemsAsList
 import top.goodboyboy.hut.databinding.FragmentKbBinding
 
 class FragmentKb : Fragment() {

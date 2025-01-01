@@ -1,4 +1,4 @@
-package top.goodboyboy.hut
+package top.goodboyboy.hut.Activity
 
 import android.content.Intent
 import android.os.Bundle
@@ -11,7 +11,15 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
+import top.goodboyboy.hut.GlobalStaticMembers
+import top.goodboyboy.hut.KbFunction
+import top.goodboyboy.hut.KbItem
+import top.goodboyboy.hut.KbItems
+import top.goodboyboy.hut.KbParam
+import top.goodboyboy.hut.R
 import top.goodboyboy.hut.databinding.ActivityCacheBinding
+import top.goodboyboy.hut.others.Hash
+import top.goodboyboy.hut.others.UncaughtException
 import java.io.File
 
 class CacheActivity : AppCompatActivity() {

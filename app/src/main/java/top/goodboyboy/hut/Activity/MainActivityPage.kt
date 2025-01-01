@@ -1,4 +1,4 @@
-package top.goodboyboy.hut
+package top.goodboyboy.hut.Activity
 
 import android.app.AlertDialog
 import android.content.Context
@@ -17,7 +17,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import top.goodboyboy.hut.GlobalStaticMembers
+import top.goodboyboy.hut.KbFunction
+import top.goodboyboy.hut.R
+import top.goodboyboy.hut.mainFragment.FragmentKb.FragmentKb
 import top.goodboyboy.hut.databinding.ActivityMainPageBinding
+import top.goodboyboy.hut.mainFragment.FragmentMe
+import top.goodboyboy.hut.mainFragment.FragmentTool
+import top.goodboyboy.hut.others.UncaughtException
 
 class MainActivityPage : AppCompatActivity() {
     private lateinit var binding: ActivityMainPageBinding
@@ -101,7 +108,7 @@ class MainActivityPage : AppCompatActivity() {
                 showAlertDialog(
                     this,
                     getString(R.string.about),
-                    getString(R.string.about_info,GlobalStaticMembers.VersionName),
+                    getString(R.string.about_info, GlobalStaticMembers.VersionName),
                     isDarkMode
                 )
 
