@@ -60,6 +60,7 @@ class FragmentMe : Fragment() {
         binding.meButtonCleanCache.setBackgroundResource(buttonBackground)
         binding.meButtonLogout.setBackgroundResource(buttonBackground)
         binding.meButtonCheckNew.setBackgroundResource(buttonBackground)
+        binding.meButtonLogoutHutApp.setBackgroundResource(buttonBackground)
 
         binding.meButtonLogout.setOnClickListener {
             logoutFun()
@@ -125,6 +126,33 @@ class FragmentMe : Fragment() {
             }
         }
 
+        binding.meButtonLogoutHutApp.setOnClickListener {
+            val fileName = "settings.txt"
+            val file = File(internalStorageDir, fileName)
+
+            if (file.exists()) {
+                val fileText = file.readText()
+                if (fileText != "") {
+                    val settings = Gson().fromJson(file.readText(), SettingsClass::class.java)
+                    settings.accessToken = ""
+                    val writer = FileWriter(file, false)
+                    writer.write(Gson().toJson(settings))
+                    writer.close()
+                    Toast.makeText(
+                        requireContext(),
+                        "清除完成！",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            } else {
+                Toast.makeText(
+                    requireContext(),
+                    "配置文件不存在，请使用注销功能！",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
+
 
         val fileName = "userInfo.txt"
         val file = File(internalStorageDir, fileName)
@@ -141,6 +169,8 @@ class FragmentMe : Fragment() {
         } else {
             Toast.makeText(context, "未找到用户信息文件！", Toast.LENGTH_LONG).show()
         }
+
+
 
     }
 

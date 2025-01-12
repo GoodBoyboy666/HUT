@@ -53,6 +53,7 @@ class LoginActivity : AppCompatActivity() {
         val fileName = "settings.txt"
         val file = File(internalStorageDir, fileName)
 
+        var isJump=false
         if (file.exists()) {
             val fileText = file.readText()
             if (fileText != "") {
@@ -66,6 +67,7 @@ class LoginActivity : AppCompatActivity() {
                     val intent = Intent(this, MainActivityPage::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                     startActivity(intent)
+                    isJump=true
                 }
             }
         }
@@ -102,95 +104,109 @@ class LoginActivity : AppCompatActivity() {
 //                }
 //            }
 
-
-        //初始化线路选择
-        val spinnerAdapter =
-            ArrayAdapter(this, android.R.layout.simple_spinner_item, GlobalStaticMembers.jwxtAPI)
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        binding.chooseAPI.adapter = spinnerAdapter
-        binding.chooseAPI.setSelection(GlobalStaticMembers.apiSelected)
-        binding.chooseAPI.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                GlobalStaticMembers.apiSelected = position
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-
-            }
-        }
-
-        var codeList = Scode(null, null, false, null, null)
-        CoroutineScope(Dispatchers.IO).launch {
-            codeList =
-                KbFunction.getScode(GlobalStaticMembers.jwxtAPI[GlobalStaticMembers.apiSelected])
-
-            if (codeList.isOk && codeList.client != null) {
-                val captcha = KbFunction.getCaptcha(
-                    GlobalStaticMembers.jwxtAPI[GlobalStaticMembers.apiSelected],
-                    codeList.client!!
+        if(!isJump) {
+            //初始化线路选择
+            val spinnerAdapter =
+                ArrayAdapter(
+                    this,
+                    android.R.layout.simple_spinner_item,
+                    GlobalStaticMembers.jwxtAPI
                 )
-                withContext(Dispatchers.Main) {
-                    binding.captchaImage.setImageBitmap(captcha.image)
+            spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            binding.chooseAPI.adapter = spinnerAdapter
+            binding.chooseAPI.setSelection(GlobalStaticMembers.apiSelected)
+            binding.chooseAPI.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    GlobalStaticMembers.apiSelected = position
                 }
-            } else {
-                Toast.makeText(this@LoginActivity, codeList.reason, Toast.LENGTH_LONG).show()
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+
+                }
             }
 
-        }
-
-        //验证码刷新事件
-        binding.captchaImage.setOnClickListener {
+            var codeList = Scode(null, null, false, null, null)
             CoroutineScope(Dispatchers.IO).launch {
-                val captcha = KbFunction.getCaptcha(
-                    GlobalStaticMembers.jwxtAPI[GlobalStaticMembers.apiSelected],
-                    codeList.client!!
-                )
-                withContext(Dispatchers.Main) {
-                    binding.captchaImage.setImageBitmap(captcha.image)
+                codeList =
+                    KbFunction.getScode(GlobalStaticMembers.jwxtAPI[GlobalStaticMembers.apiSelected])
+
+                if (codeList.isOk && codeList.client != null) {
+                    val captcha = KbFunction.getCaptcha(
+                        GlobalStaticMembers.jwxtAPI[GlobalStaticMembers.apiSelected],
+                        codeList.client!!
+                    )
+                    withContext(Dispatchers.Main) {
+                        binding.captchaImage.setImageBitmap(captcha.image)
+                    }
+                } else {
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(this@LoginActivity, codeList.reason, Toast.LENGTH_LONG)
+                            .show()
+                    }
+                }
+
+            }
+
+            //验证码刷新事件
+            binding.captchaImage.setOnClickListener {
+                CoroutineScope(Dispatchers.IO).launch {
+                    val captcha = KbFunction.getCaptcha(
+                        GlobalStaticMembers.jwxtAPI[GlobalStaticMembers.apiSelected],
+                        codeList.client!!
+                    )
+                    withContext(Dispatchers.Main) {
+                        binding.captchaImage.setImageBitmap(captcha.image)
+                    }
                 }
             }
-        }
 
-        //登录按钮事件绑定
-        binding.buttonLogin.setOnClickListener {
-            binding.progressRelativeLayout.visibility = View.VISIBLE
+            //登录按钮事件绑定
+            binding.buttonLogin.setOnClickListener {
+                binding.progressRelativeLayout.visibility = View.VISIBLE
 
 //            KbFunction.clearDirectory(internalStorageDir)
 
-            if (!codeList.scode.isNullOrBlank() && !codeList.sxh.isNullOrBlank() && codeList.client != null) {
+                if (!codeList.scode.isNullOrBlank() && !codeList.sxh.isNullOrBlank() && codeList.client != null) {
 
-                CoroutineScope(Dispatchers.Main).launch {
-                    val auth: AuthStatus
-                    withContext(Dispatchers.IO) {
-                        auth = checkLogin(codeList.scode!!, codeList.sxh!!,binding.verificationCode.text.toString(),codeList.client!!)
-                    }
-                    if (auth.status) {
-                        //将账号密码与设置写入文件
-                        GlobalStaticMembers.client = codeList.client
-                        binding.progressRelativeLayout.visibility = View.GONE
+                    CoroutineScope(Dispatchers.Main).launch {
+                        val auth: AuthStatus
+                        withContext(Dispatchers.IO) {
+                            auth = checkLogin(
+                                codeList.scode!!,
+                                codeList.sxh!!,
+                                binding.verificationCode.text.toString(),
+                                codeList.client!!
+                            )
+                        }
+                        if (auth.status) {
+                            //将账号密码与设置写入文件
+                            GlobalStaticMembers.client = codeList.client
+                            binding.progressRelativeLayout.visibility = View.GONE
 
-                        val settingsClass = SettingsClass(
-                            binding.userNum.text.toString(),
-                            binding.userPasswd.text.toString(),
-                            selectedAPI = binding.chooseAPI.selectedItemPosition,
-                            reCache = false
-                        )
+                            val settingsClass = SettingsClass(
+                                binding.userNum.text.toString(),
+                                binding.userPasswd.text.toString(),
+                                selectedAPI = binding.chooseAPI.selectedItemPosition,
+                                reCache = false
+                            )
 
-                        val settingsName = "settings.txt"
-                        val settingsFile = File(internalStorageDir, settingsName)
-                        val writer = FileWriter(settingsFile, false)
-                        writer.write(Gson().toJson(settingsClass))
-                        writer.close()
-                        val intent = Intent(this@LoginActivity, CacheActivity::class.java)
-                        startActivity(intent)
-                    } else {
-                        binding.progressRelativeLayout.visibility = View.GONE
-                        Toast.makeText(this@LoginActivity, auth.reason, Toast.LENGTH_LONG).show()
+                            val settingsName = "settings.txt"
+                            val settingsFile = File(internalStorageDir, settingsName)
+                            val writer = FileWriter(settingsFile, false)
+                            writer.write(Gson().toJson(settingsClass))
+                            writer.close()
+                            val intent = Intent(this@LoginActivity, CacheActivity::class.java)
+                            startActivity(intent)
+                        } else {
+                            binding.progressRelativeLayout.visibility = View.GONE
+                            Toast.makeText(this@LoginActivity, auth.reason, Toast.LENGTH_LONG)
+                                .show()
+                        }
                     }
                 }
             }

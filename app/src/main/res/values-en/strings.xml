@@ -2,8 +2,8 @@
 <resources>
     <string name="app_name">Hut class schedule</string>
     <string name="get_kb_button_name">Get the class schedule</string>
-    <string name="user_hint">Please enter your student number</string>
-    <string name="passwd_hint">Please enter your password</string>
+    <string name="user_hint">Please enter student number</string>
+    <string name="passwd_hint">Please enter password</string>
     <string name="about">about</string>
     <string name="log_output">Log output</string>
     <string name="author_page">Author homepage</string>
@@ -27,4 +27,8 @@
     <string name="choose_API">Please select a API</string>
     <string name="check_update">Check Updata</string>
     <string name="captcha">verificationCode</string>
+    <string name="backbutton">backButton</string>
+    <string name="close_button">closeButton</string>
+    <string name="user_num">Please enter user num</string>
+    <string name="logout_hut_app">logout hut app</string>
 </resources>

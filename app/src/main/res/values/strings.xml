@@ -29,4 +29,8 @@
     <string name="about_info" translatable="false">正式版本：v%s\nWritten by GoodBoyboy</string>
     <string name="check_update">检测更新</string>
     <string name="captcha">验证码</string>
+    <string name="backbutton">backButton</string>
+    <string name="close_button">closeButton</string>
+    <string name="user_num">请输入账号</string>
+    <string name="logout_hut_app">注销智慧工大app登录状态</string>
 </resources>

@@ -43,7 +43,7 @@ class KbFunction {
             scode: String,
             sxh: String,
             client: OkHttpClient,
-            verificationCode:String
+            verificationCode: String
         ): AuthStatus {
 
 //            val client = getHttpClient()
@@ -127,19 +127,24 @@ class KbFunction {
                 .url("${api}jsxsd/")
                 .get()
                 .build()
-            val scodeResponse = client.newCall(scodeRequest).execute()
-            if (scodeResponse.isSuccessful) {
-                val responseBody = scodeResponse.body?.string()
-                if (!responseBody.isNullOrBlank()) {
-                    val scodeMatchResult = scodeRegex.find(responseBody)
-                    val sxhMatchResult = sxhRegex.find(responseBody)
-                    if (scodeMatchResult != null && sxhMatchResult != null) {
-                        val scode = scodeMatchResult.groups[1]?.value
-                        val sxh = sxhMatchResult.groups[1]?.value
-                        return Scode(scode, sxh, true, null, client)
+            try {
+                val scodeResponse = client.newCall(scodeRequest).execute()
+
+                if (scodeResponse.isSuccessful) {
+                    val responseBody = scodeResponse.body?.string()
+                    if (!responseBody.isNullOrBlank()) {
+                        val scodeMatchResult = scodeRegex.find(responseBody)
+                        val sxhMatchResult = sxhRegex.find(responseBody)
+                        if (scodeMatchResult != null && sxhMatchResult != null) {
+                            val scode = scodeMatchResult.groups[1]?.value
+                            val sxh = sxhMatchResult.groups[1]?.value
+                            return Scode(scode, sxh, true, null, client)
+                        }
+                        return Scode(null, null, false, "解析scode与sxh失败！", null)
                     }
-                    return Scode(null, null, false, "解析scode与sxh失败！", null)
                 }
+            } catch (e: Exception) {
+                println(e)
             }
             return Scode(null, null, false, "请求scode与sxh失败！", null)
         }

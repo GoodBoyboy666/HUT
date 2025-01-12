@@ -13,6 +13,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -28,6 +29,8 @@ import top.goodboyboy.hut.others.UncaughtException
 
 class MainActivityPage : AppCompatActivity() {
     private lateinit var binding: ActivityMainPageBinding
+    private var selectedFragmentId= R.id.navigation_item1
+    private val viewModel: MainActivityPageViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,6 +65,7 @@ class MainActivityPage : AppCompatActivity() {
         bottomNavigationView.background = bottomNavigationViewDrawable
 
         bottomNavigationView.setOnItemSelectedListener { menuItem ->
+            selectedFragmentId = menuItem.itemId
             when (menuItem.itemId) {
                 R.id.navigation_item1 -> {
                     replaceFragment(FragmentKb())
@@ -81,7 +85,11 @@ class MainActivityPage : AppCompatActivity() {
                 else -> false
             }
         }
-        replaceFragment(FragmentKb())
+        if (savedInstanceState != null) {
+            selectedFragmentId = savedInstanceState.getInt("SELECTED_FRAGMENT_ID", R.id.navigation_item1)
+        }
+
+        bottomNavigationView.selectedItemId = selectedFragmentId
     }
 
     private fun replaceFragment(fragment: Fragment) {
@@ -90,6 +98,11 @@ class MainActivityPage : AppCompatActivity() {
             .setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
             .replace(R.id.fragmentContainer, fragment)
             .commit()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt("SELECTED_FRAGMENT_ID", selectedFragmentId)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

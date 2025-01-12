@@ -5,8 +5,29 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity.BrowseActivity">
-
+    tools:context=".Activity.BrowseActivity"
+    android:background="#F4BB6E"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageButton
+            android:id="@+id/backImageButton"
+            android:layout_width="50sp"
+            android:layout_height="50sp"
+            android:src="@drawable/icon_back"
+            android:scaleType="centerInside"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/backbutton" />
+        <ImageButton
+            android:id="@+id/closeImageButton"
+            android:layout_width="50sp"
+            android:layout_height="50sp"
+            android:src="@drawable/icon_close"
+            android:scaleType="centerInside"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/close_button" />
+    </LinearLayout>
     <WebView
         android:id="@+id/browse_WebView"
         android:layout_width="match_parent"

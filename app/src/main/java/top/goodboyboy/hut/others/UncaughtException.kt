@@ -60,7 +60,7 @@ class UncaughtException private constructor(context: Context):Thread.UncaughtExc
         } catch (e: Exception) {
             Log.e("uncaughtException",e.message?:"Can't get error message")
         }
-        exitProcess(0)
+//        exitProcess(0)
     }
 
     /**
