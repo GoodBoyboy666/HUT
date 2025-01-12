@@ -2,7 +2,7 @@
 
 /app/src/main/res/drawable-nodpi/bottom_background.png
 /app/src/main/res/drawable-nodpi/hut_getkb_button_down.png
-/app/src/main/res/dradrawable-nodpi/hut_getkb_button_up.png
+/app/src/main/res/drawable-nodpi/hut_getkb_button_up.png
 /app/src/main/res/drawable-nodpi/hut_getkb_button.png
 /app/src/main/res/drawable-nodpi/hut_kb_about.png
 /app/src/main/res/drawable-nodpi/hut_main_kb_background.png
