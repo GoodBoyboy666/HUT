@@ -1,5 +1,7 @@
 package top.goodboyboy.hut.Activity
 
+import android.content.ActivityNotFoundException
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.webkit.SslErrorHandler
@@ -7,6 +9,7 @@ import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.OnBackPressedDispatcher
 import androidx.activity.enableEdgeToEdge
@@ -27,6 +30,9 @@ class BrowseActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
+        //全局捕捉异常
+        UncaughtException.getInstance(this)
+
         var url = intent.getStringExtra("url") ?: ""
         val jwt = intent.getStringExtra("jwt")
         val tokenAccept = intent.getStringExtra("tokenAccept") ?: ""
@@ -44,7 +50,29 @@ class BrowseActivity : AppCompatActivity() {
         webView.settings.loadWithOverviewMode = true
         webView.getSettings().setDomStorageEnabled(true);
 
-        webView.webViewClient =WebViewClient()
+        webView.webViewClient =object :WebViewClient(){
+            override fun shouldOverrideUrlLoading(
+                view: WebView?,
+                url: String?
+            ): Boolean {
+                if(url!=null){
+                    if (isExternalLink(url)) {
+                        try {
+                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                            view?.context?.startActivity(intent)
+                            return true
+                        } catch (e: ActivityNotFoundException) {
+                            // 处理异常
+                            Toast.makeText(this@BrowseActivity, "无法调起应用，请检查是否安装了相关应用！", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+                return false
+            }
+            private fun isExternalLink(url: String): Boolean {
+                return url.startsWith("weixin") || url.startsWith("bankabc")
+            }
+        }
 //        webView.webViewClient = object : WebViewClient() {
 //            ///only for test
 //            override fun onReceivedSslError(
