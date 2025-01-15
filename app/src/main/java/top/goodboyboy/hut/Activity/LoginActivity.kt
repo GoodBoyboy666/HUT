@@ -7,7 +7,6 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -18,14 +17,13 @@ import top.goodboyboy.hut.GlobalStaticMembers
 import top.goodboyboy.hut.KbFunction
 import top.goodboyboy.hut.R
 import top.goodboyboy.hut.Scode
-import top.goodboyboy.hut.SettingsClass
+import top.goodboyboy.hut.Util.SettingsUtil
 import top.goodboyboy.hut.databinding.ActivityLoginBinding
 import top.goodboyboy.hut.others.UncaughtException
-import java.io.File
-import java.io.FileWriter
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
+    private lateinit var codeList: Scode
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
@@ -46,30 +44,36 @@ class LoginActivity : AppCompatActivity() {
         binding.main.setBackgroundResource(pageBackground)
         binding.buttonLogin.setBackgroundResource(buttonBackground)
 
-        val internalStorageDir = application.filesDir
+        //初始化设置
 
-        //检测是否存在设置文件
+        val setting = SettingsUtil(this)
+
+
         binding.progressRelativeLayout.visibility = View.GONE
-        val fileName = "settings.txt"
-        val file = File(internalStorageDir, fileName)
 
-        var isJump=false
-        if (file.exists()) {
-            val fileText = file.readText()
-            if (fileText != "") {
-                val settings = Gson().fromJson(file.readText(), SettingsClass::class.java)
-                binding.userNum.setText(settings.userNum)
-                binding.userPasswd.setText(settings.userPasswd)
-                GlobalStaticMembers.apiSelected = settings.selectedAPI
-
-                //检测是否为更新缓存
-                if (!settings.reCache) {
-                    val intent = Intent(this, MainActivityPage::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    startActivity(intent)
-                    isJump=true
-                }
-            }
+//        var isJump=false
+//        if (file.exists()) {
+//            val fileText = file.readText()
+//            if (fileText != "") {
+//                val settings = Gson().fromJson(file.readText(), SettingsClass::class.java)
+//                binding.userNum.setText(settings.userNum)
+//                binding.userPasswd.setText(settings.userPasswd)
+//                GlobalStaticMembers.apiSelected = settings.selectedAPI
+//
+//                //检测是否为更新缓存
+//                if (!settings.reCache) {
+//                    val intent = Intent(this, MainActivityPage::class.java)
+//                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+//                    startActivity(intent)
+//                    isJump=true
+//                }
+//            }
+//        }
+        //检测是否已经登录
+        if (setting.globalSettings.isLogin) {
+            val intent = Intent(this, MainActivityPage::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
         }
 
 
@@ -104,7 +108,11 @@ class LoginActivity : AppCompatActivity() {
 //                }
 //            }
 
-        if(!isJump) {
+        else {
+            //检测是否存在账号信息并读取
+            binding.userNum.setText(setting.globalSettings.userNum)
+            binding.userPasswd.setText(setting.globalSettings.userPasswd)
+            GlobalStaticMembers.apiSelected = setting.globalSettings.selectedAPI
             //初始化线路选择
             val spinnerAdapter =
                 ArrayAdapter(
@@ -130,37 +138,34 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
 
-            var codeList = Scode(null, null, false, null, null)
-            CoroutineScope(Dispatchers.IO).launch {
-                codeList =
-                    KbFunction.getScode(GlobalStaticMembers.jwxtAPI[GlobalStaticMembers.apiSelected])
+            //初始化scode
+            scode()
 
-                if (codeList.isOk && codeList.client != null) {
-                    val captcha = KbFunction.getCaptcha(
-                        GlobalStaticMembers.jwxtAPI[GlobalStaticMembers.apiSelected],
-                        codeList.client!!
-                    )
-                    withContext(Dispatchers.Main) {
-                        binding.captchaImage.setImageBitmap(captcha.image)
-                    }
-                } else {
-                    withContext(Dispatchers.Main) {
-                        Toast.makeText(this@LoginActivity, codeList.reason, Toast.LENGTH_LONG)
-                            .show()
-                    }
-                }
-
-            }
 
             //验证码刷新事件
             binding.captchaImage.setOnClickListener {
                 CoroutineScope(Dispatchers.IO).launch {
-                    val captcha = KbFunction.getCaptcha(
-                        GlobalStaticMembers.jwxtAPI[GlobalStaticMembers.apiSelected],
-                        codeList.client!!
-                    )
-                    withContext(Dispatchers.Main) {
-                        binding.captchaImage.setImageBitmap(captcha.image)
+                    try {
+                        if (codeList.client != null) {
+                            val captcha = KbFunction.getCaptcha(
+                                GlobalStaticMembers.jwxtAPI[GlobalStaticMembers.apiSelected],
+                                codeList.client!!
+                            )
+
+                            withContext(Dispatchers.Main) {
+                                binding.captchaImage.setImageBitmap(captcha.image)
+                            }
+                        }else{
+                            scode()
+                        }
+                    } catch (e: Exception) {
+                        withContext(Dispatchers.Main) {
+                            Toast.makeText(
+                                this@LoginActivity,
+                                e.message ?: "获取验证码失败！",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     }
                 }
             }
@@ -188,18 +193,27 @@ class LoginActivity : AppCompatActivity() {
                             GlobalStaticMembers.client = codeList.client
                             binding.progressRelativeLayout.visibility = View.GONE
 
-                            val settingsClass = SettingsClass(
-                                binding.userNum.text.toString(),
-                                binding.userPasswd.text.toString(),
-                                selectedAPI = binding.chooseAPI.selectedItemPosition,
-                                reCache = false
-                            )
+//                            val settingsClass = SettingsClass(
+//                                binding.userNum.text.toString(),
+//                                binding.userPasswd.text.toString(),
+//                                selectedAPI = binding.chooseAPI.selectedItemPosition,
+//                                reCache = false
+//                            )
+//
+//                            val settingsName = "settings.txt"
+//                            val settingsFile = File(internalStorageDir, settingsName)
+//                            val writer = FileWriter(settingsFile, false)
+//                            writer.write(Gson().toJson(settingsClass))
+//                            writer.close()
 
-                            val settingsName = "settings.txt"
-                            val settingsFile = File(internalStorageDir, settingsName)
-                            val writer = FileWriter(settingsFile, false)
-                            writer.write(Gson().toJson(settingsClass))
-                            writer.close()
+                            setting.globalSettings.userNum = binding.userNum.text.toString()
+                            setting.globalSettings.userPasswd = binding.userPasswd.text.toString()
+                            setting.globalSettings.selectedAPI =
+                                binding.chooseAPI.selectedItemPosition
+                            setting.globalSettings.reCache = false
+                            setting.globalSettings.isLogin = true
+                            setting.save()
+
                             val intent = Intent(this@LoginActivity, CacheActivity::class.java)
                             startActivity(intent)
                         } else {
@@ -208,8 +222,35 @@ class LoginActivity : AppCompatActivity() {
                                 .show()
                         }
                     }
+                }else{
+                    Toast.makeText(this@LoginActivity, "未获取到scode！", Toast.LENGTH_LONG)
+                        .show()
                 }
             }
+        }
+    }
+
+    private fun scode() {
+        //获取登录所需参数
+        CoroutineScope(Dispatchers.IO).launch {
+            codeList =
+                KbFunction.getScode(GlobalStaticMembers.jwxtAPI[GlobalStaticMembers.apiSelected])
+
+            if (codeList.isOk && codeList.client != null) {
+                val captcha = KbFunction.getCaptcha(
+                    GlobalStaticMembers.jwxtAPI[GlobalStaticMembers.apiSelected],
+                    codeList.client!!
+                )
+                withContext(Dispatchers.Main) {
+                    binding.captchaImage.setImageBitmap(captcha.image)
+                }
+            } else {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(this@LoginActivity, codeList.reason?:"获取scode失败", Toast.LENGTH_LONG)
+                        .show()
+                }
+            }
+
         }
     }
 
@@ -218,7 +259,12 @@ class LoginActivity : AppCompatActivity() {
      *
      * @return 登录状态对象
      */
-    private fun checkLogin(scode: String, sxh: String,verificationCode:String, client: OkHttpClient): AuthStatus {
+    private fun checkLogin(
+        scode: String,
+        sxh: String,
+        verificationCode: String,
+        client: OkHttpClient
+    ): AuthStatus {
 //        return MainFunction(MainFunction.getHttpClient(),this).authentication(binding.userNum.text.toString(),binding.userPasswd.text.toString())
         return KbFunction.authentication(
             binding.userNum.text.toString(),
@@ -230,4 +276,5 @@ class LoginActivity : AppCompatActivity() {
             verificationCode
         )
     }
+
 }

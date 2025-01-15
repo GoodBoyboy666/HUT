@@ -4,7 +4,7 @@
     <string name="get_kb_button_name">Get the class schedule</string>
     <string name="user_hint">Please enter student number</string>
     <string name="passwd_hint">Please enter password</string>
-    <string name="about">about</string>
+    <string name="about">About</string>
     <string name="log_output">Log output</string>
     <string name="author_page">Author homepage</string>
     <string name="choose_zhouci">Please select a week:</string>

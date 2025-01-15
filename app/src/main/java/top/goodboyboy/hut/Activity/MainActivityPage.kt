@@ -21,6 +21,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import top.goodboyboy.hut.GlobalStaticMembers
 import top.goodboyboy.hut.KbFunction
 import top.goodboyboy.hut.R
+import top.goodboyboy.hut.Util.AlertDialogUtil
 import top.goodboyboy.hut.mainFragment.FragmentKb.FragmentKb
 import top.goodboyboy.hut.databinding.ActivityMainPageBinding
 import top.goodboyboy.hut.mainFragment.FragmentMe
@@ -29,7 +30,7 @@ import top.goodboyboy.hut.others.UncaughtException
 
 class MainActivityPage : AppCompatActivity() {
     private lateinit var binding: ActivityMainPageBinding
-    private var selectedFragmentId= R.id.navigation_item1
+    private var selectedFragmentId = R.id.navigation_item1
     private val viewModel: MainActivityPageViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -86,7 +87,8 @@ class MainActivityPage : AppCompatActivity() {
             }
         }
         if (savedInstanceState != null) {
-            selectedFragmentId = savedInstanceState.getInt("SELECTED_FRAGMENT_ID", R.id.navigation_item1)
+            selectedFragmentId =
+                savedInstanceState.getInt("SELECTED_FRAGMENT_ID", R.id.navigation_item1)
         }
 
         bottomNavigationView.selectedItemId = selectedFragmentId
@@ -118,12 +120,19 @@ class MainActivityPage : AppCompatActivity() {
         return when (item.itemId) {
             R.id.action_about -> {
 
-                showAlertDialog(
+//                showAlertDialog(
+//                    this,
+//                    getString(R.string.about),
+//                    getString(R.string.about_info, GlobalStaticMembers.VersionName),
+//                    isDarkMode
+//                )
+
+                AlertDialogUtil(
                     this,
                     getString(R.string.about),
                     getString(R.string.about_info, GlobalStaticMembers.VersionName),
                     isDarkMode
-                )
+                    ).show()
 
                 true
             }
@@ -147,40 +156,40 @@ class MainActivityPage : AppCompatActivity() {
 
 
     companion object {
-        /**
-         * 显示提示框
-         *
-         * @param context 上下文
-         * @param title 标题
-         * @param message 内容
-         * @param isDark 是否暗色模式
-         */
-        fun showAlertDialog(context: Context, title: String, message: String, isDark: Boolean) {
-            val builder = AlertDialog.Builder(context)
-            val inflater = LayoutInflater.from(context)
-            val dialogView: View = inflater.inflate(R.layout.custom_dialog, null)
-            val dialog: LinearLayout = dialogView.findViewById(R.id.custom_alertdialog)
-            val titleTextView: TextView = dialogView.findViewById(R.id.dialog_title)
-            val messageTextView: TextView = dialogView.findViewById(R.id.dialog_message)
-            val positiveButton: Button = dialogView.findViewById(R.id.dialog_positiveButton)
-            var dialogBackground = R.drawable.info_border
-            var okBackground = R.drawable.kb_ok
-            titleTextView.text = title
-            messageTextView.text = message
-
-            if (isDark) {
-                dialogBackground = R.color.grey
-                okBackground = R.color.grey
-            }
-            dialog.setBackgroundResource(dialogBackground)
-            positiveButton.setBackgroundResource(okBackground)
-            builder.setView(dialogView)
-            val alertDialog = builder.create()
-            positiveButton.setOnClickListener {
-                alertDialog.dismiss()
-            }
-            alertDialog.show()
-        }
+//        /**
+//         * 显示提示框
+//         *
+//         * @param context 上下文
+//         * @param title 标题
+//         * @param message 内容
+//         * @param isDark 是否暗色模式
+//         */
+//        fun showAlertDialog(context: Context, title: String, message: String, isDark: Boolean) {
+//            val builder = AlertDialog.Builder(context)
+//            val inflater = LayoutInflater.from(context)
+//            val dialogView: View = inflater.inflate(R.layout.custom_dialog, null)
+//            val dialog: LinearLayout = dialogView.findViewById(R.id.custom_alertdialog)
+//            val titleTextView: TextView = dialogView.findViewById(R.id.dialog_title)
+//            val messageTextView: TextView = dialogView.findViewById(R.id.dialog_message)
+//            val positiveButton: Button = dialogView.findViewById(R.id.dialog_positiveButton)
+//            var dialogBackground = R.drawable.info_border
+//            var okBackground = R.drawable.kb_ok
+//            titleTextView.text = title
+//            messageTextView.text = message
+//
+//            if (isDark) {
+//                dialogBackground = R.color.grey
+//                okBackground = R.color.grey
+//            }
+//            dialog.setBackgroundResource(dialogBackground)
+//            positiveButton.setBackgroundResource(okBackground)
+//            builder.setView(dialogView)
+//            val alertDialog = builder.create()
+//            positiveButton.setOnClickListener {
+//                alertDialog.dismiss()
+//            }
+//            alertDialog.show()
+//        }
     }
 
 

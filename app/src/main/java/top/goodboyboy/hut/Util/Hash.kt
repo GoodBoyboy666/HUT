@@ -1,4 +1,4 @@
-package top.goodboyboy.hut.others
+package top.goodboyboy.hut.Util
 
 import java.security.MessageDigest
 

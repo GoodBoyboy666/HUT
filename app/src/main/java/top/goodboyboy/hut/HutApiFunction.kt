@@ -105,12 +105,18 @@ class HutApiFunction {
                 val jsonObject = JsonParser.parseString(responseJson).asJsonObject
                 val codeStatus =
                     jsonObject.get("code").asInt
-                if (codeStatus == 0) {
-                    return ServiceList(true, responseJson, null)
-                } else if (codeStatus == -1) {
-                    return ServiceList(false, null, "获取失败，可能由于令牌已失效，请重新登录")
-                } else {
-                    return ServiceList(false, null, jsonObject.get("message").asString)
+                return when (codeStatus) {
+                    0 -> {
+                        ServiceList(true, responseJson, null)
+                    }
+
+                    -1 -> {
+                        ServiceList(false, null, "获取失败，可能由于令牌已失效，请重新登录")
+                    }
+
+                    else -> {
+                        ServiceList(false, null, jsonObject.get("message").asString)
+                    }
                 }
             }
             return ServiceList(false, null, "请求失败！")

@@ -6,16 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.Toast
-import androidx.compose.ui.graphics.Color
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.coroutines.SupervisorJob
 import top.goodboyboy.hut.GridAdapterItems
 import top.goodboyboy.hut.GridHeaderAdapterItems
-import top.goodboyboy.hut.others.Hash
+import top.goodboyboy.hut.Util.Hash
 import top.goodboyboy.hut.Adapter.KbAdapter
 import top.goodboyboy.hut.KbFunction
 import top.goodboyboy.hut.Adapter.KbHeaderAdapter

@@ -9,6 +9,7 @@ import android.widget.TextView
 import top.goodboyboy.hut.GridAdapterItems
 import top.goodboyboy.hut.Activity.MainActivityPage
 import top.goodboyboy.hut.R
+import top.goodboyboy.hut.Util.AlertDialogUtil
 
 class KbAdapter(
     private val context: Context,
@@ -63,12 +64,19 @@ class KbAdapter(
 
         view.setOnClickListener {
             val selectedItem = data.kbInfo?.get(position)
-            MainActivityPage.showAlertDialog(
+//            MainActivityPage.showAlertDialog(
+//                context,
+//                data.kbTitle?.get(position) ?: "N/A",
+//                "$selectedItem",
+//                dark
+//            )
+
+            AlertDialogUtil(
                 context,
                 data.kbTitle?.get(position) ?: "N/A",
                 "$selectedItem",
                 dark
-            )
+            ).show()
         }
 
 //        val dividerColor = ContextCompat.getColor(context, R.color.black)

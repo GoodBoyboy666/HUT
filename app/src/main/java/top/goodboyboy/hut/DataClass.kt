@@ -4,8 +4,9 @@ data class SettingsClass(
     var userNum: String = "",
     var userPasswd: String = "",
     var selectedAPI: Int = 0,
-    var reCache:Boolean,
-    var accessToken: String=""
+    var reCache: Boolean = false,
+    var accessToken: String = "",
+    var isLogin: Boolean = false
 )
 
 data class UserInfoClass(
