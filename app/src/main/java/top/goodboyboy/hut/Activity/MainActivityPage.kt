@@ -18,6 +18,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import top.goodboyboy.hut.CheckUpdate
 import top.goodboyboy.hut.GlobalStaticMembers
 import top.goodboyboy.hut.KbFunction
 import top.goodboyboy.hut.R
@@ -52,6 +57,35 @@ class MainActivityPage : AppCompatActivity() {
             binding.mainPage.setBackgroundResource(R.color.black)
             hutNavBarColor = R.color.grey
             bottomBackground = R.color.grey
+        }
+
+        //检测更新
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val status = CheckUpdate.getLatestVersionFromGitea()
+                withContext(Dispatchers.Main) {
+                    if (status.isSuccess) {
+                        AlertDialogUtil(
+                            this@MainActivityPage,
+                            "检测到新版本" + " " + status.versionInfo?.verName,
+                            status.versionInfo?.verBody ?: "未获取到更新说明",
+                            isDarkMode,
+                            AlertDialogUtil.AlertDialogEvent.CUSTOM
+                        ) {
+                            val intent = Intent(
+                                Intent.ACTION_VIEW,
+                                Uri.parse(
+                                    status.versionInfo?.verUrl
+                                        ?: "https://git.goodboyboy.top/goodboyboy/HUT"
+                                )
+                            )
+                            startActivity(intent)
+                        }.show()
+                    }
+                }
+            }catch (_:Exception){
+
+            }
         }
 
         //初始化toolbar

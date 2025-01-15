@@ -19,6 +19,7 @@ import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import top.goodboyboy.hut.CheckUpdate
 import top.goodboyboy.hut.GlobalStaticMembers
 import top.goodboyboy.hut.KbFunction
@@ -118,9 +119,10 @@ class FragmentMe : Fragment() {
         }
 
         binding.meButtonCheckNew.setOnClickListener {
-            CoroutineScope(Dispatchers.Main).launch {
-                val status = CheckUpdate.getLatestVersionFromGitea()
-                if (status.isSuccess) {
+            CoroutineScope(Dispatchers.IO).launch {
+                try {
+                    val status = CheckUpdate.getLatestVersionFromGitea()
+                    if (status.isSuccess) {
 //                    showNewVersionAlertDialog(
 //                        requireContext(),
 //                        "检测到新版本" + " " + status.versionInfo?.verName,
@@ -128,39 +130,49 @@ class FragmentMe : Fragment() {
 //                        status.versionInfo?.verUrl ?: "https://git.goodboyboy.top/goodboyboy/HUT",
 //                        isDarkMode
 //                    )
-
-                    AlertDialogUtil(
-                        requireContext(),
-                        "检测到新版本" + " " + status.versionInfo?.verName,
-                        status.versionInfo?.verBody ?: "未获取到更新说明",
-                        isDarkMode,
-                        AlertDialogUtil.AlertDialogEvent.CUSTOM
-                    ) {
-                        val intent = Intent(
-                            Intent.ACTION_VIEW,
-                            Uri.parse(
-                                status.versionInfo?.verUrl
-                                    ?: "https://git.goodboyboy.top/goodboyboy/HUT"
-                            )
-                        )
-                        startActivity(intent)
-                    }.show()
-
-                } else {
+                        withContext(Dispatchers.Main) {
+                            AlertDialogUtil(
+                                requireContext(),
+                                "检测到新版本" + " " + status.versionInfo?.verName,
+                                status.versionInfo?.verBody ?: "未获取到更新说明",
+                                isDarkMode,
+                                AlertDialogUtil.AlertDialogEvent.CUSTOM
+                            ) {
+                                val intent = Intent(
+                                    Intent.ACTION_VIEW,
+                                    Uri.parse(
+                                        status.versionInfo?.verUrl
+                                            ?: "https://git.goodboyboy.top/goodboyboy/HUT"
+                                    )
+                                )
+                                startActivity(intent)
+                            }.show()
+                        }
+                    } else {
 //                    MainActivityPage.showAlertDialog(
 //                        requireContext(),
 //                        "提示",
 //                        status.reason ?: "检查更新失败！",
 //                        isDarkMode
 //                    )
-
-                    AlertDialogUtil(
-                        requireContext(),
-                        "提示",
-                        status.reason ?: "检查更新失败！",
-                        isDarkMode,
-                    ).show()
-
+                        withContext(Dispatchers.Main) {
+                            AlertDialogUtil(
+                                requireContext(),
+                                "提示",
+                                status.reason ?: "检查更新失败！",
+                                isDarkMode,
+                            ).show()
+                        }
+                    }
+                }catch (e:Exception){
+                    withContext(Dispatchers.Main){
+                        AlertDialogUtil(
+                            requireContext(),
+                            "提示",
+                            e.message ?: "检查更新失败！",
+                            isDarkMode,
+                        ).show()
+                    }
                 }
             }
         }

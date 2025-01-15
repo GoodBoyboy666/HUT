@@ -1,6 +1,7 @@
 package top.goodboyboy.hut.Activity
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
@@ -13,10 +14,12 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import top.goodboyboy.hut.AuthStatus
+import top.goodboyboy.hut.CheckUpdate
 import top.goodboyboy.hut.GlobalStaticMembers
 import top.goodboyboy.hut.KbFunction
 import top.goodboyboy.hut.R
 import top.goodboyboy.hut.Scode
+import top.goodboyboy.hut.Util.AlertDialogUtil
 import top.goodboyboy.hut.Util.SettingsUtil
 import top.goodboyboy.hut.databinding.ActivityLoginBinding
 import top.goodboyboy.hut.others.UncaughtException
@@ -35,9 +38,11 @@ class LoginActivity : AppCompatActivity() {
 
         var pageBackground = R.drawable.hut_main_kb_background
         var buttonBackground = R.drawable.hut_getkb_button
+        val isDarkMode=KbFunction.checkDarkMode(this)
+
 
         //暗色模式判定
-        if (KbFunction.checkDarkMode(this)) {
+        if (isDarkMode) {
             pageBackground = R.color.black
             buttonBackground = R.color.grey
         }
@@ -113,6 +118,36 @@ class LoginActivity : AppCompatActivity() {
             binding.userNum.setText(setting.globalSettings.userNum)
             binding.userPasswd.setText(setting.globalSettings.userPasswd)
             GlobalStaticMembers.apiSelected = setting.globalSettings.selectedAPI
+
+            //检测更新
+            CoroutineScope(Dispatchers.IO).launch {
+                try {
+                    val status = CheckUpdate.getLatestVersionFromGitea()
+                    withContext(Dispatchers.Main) {
+                        if (status.isSuccess) {
+                            AlertDialogUtil(
+                                this@LoginActivity,
+                                "检测到新版本" + " " + status.versionInfo?.verName,
+                                status.versionInfo?.verBody ?: "未获取到更新说明",
+                                isDarkMode,
+                                AlertDialogUtil.AlertDialogEvent.CUSTOM
+                            ) {
+                                val intent = Intent(
+                                    Intent.ACTION_VIEW,
+                                    Uri.parse(
+                                        status.versionInfo?.verUrl
+                                            ?: "https://git.goodboyboy.top/goodboyboy/HUT"
+                                    )
+                                )
+                                startActivity(intent)
+                            }.show()
+                        }
+                    }
+                }catch (_:Exception){
+                    
+                }
+            }
+
             //初始化线路选择
             val spinnerAdapter =
                 ArrayAdapter(
