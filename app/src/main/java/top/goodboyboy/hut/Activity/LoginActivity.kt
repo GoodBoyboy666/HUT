@@ -144,7 +144,7 @@ class LoginActivity : AppCompatActivity() {
                         }
                     }
                 }catch (_:Exception){
-                    
+
                 }
             }
 
