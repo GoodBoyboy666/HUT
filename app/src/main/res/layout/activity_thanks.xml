@@ -5,8 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity.Thanks"
-    android:background="@drawable/hut_main_kb_background">
+    tools:context=".Activity.Thanks">
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"

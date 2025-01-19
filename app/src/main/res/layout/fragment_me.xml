@@ -55,6 +55,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/about"
+                style="@style/Widget.Material3.Button.OutlinedButton"
                 android:layout_margin="10dp"/>
 
             <Button
@@ -62,6 +63,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/author_page"
+                style="@style/Widget.Material3.Button.OutlinedButton"
                 android:layout_margin="10dp"/>
 
             <Button
@@ -69,24 +71,28 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/clean_kb_cache"
+                style="@style/Widget.Material3.Button.OutlinedButton"
                 android:layout_margin="10dp"/>
             <Button
                 android:id="@+id/me_button_check_new"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/check_update"
+                style="@style/Widget.Material3.Button.OutlinedButton"
                 android:layout_margin="10dp"/>
             <Button
                 android:id="@+id/me_button_logout_hut_app"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/logout_hut_app"
+                style="@style/Widget.Material3.Button.OutlinedButton"
                 android:layout_margin="10dp"/>
             <Button
                 android:id="@+id/me_button_logout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/logout"
+                style="@style/Widget.Material3.Button.OutlinedButton"
                 android:layout_margin="10dp"/>
 
         </LinearLayout>

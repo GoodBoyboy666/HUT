@@ -37,9 +37,6 @@ class BrowseActivity : AppCompatActivity() {
         val jwt = intent.getStringExtra("jwt")
         val tokenAccept = intent.getStringExtra("tokenAccept") ?: ""
 
-        //全局捕捉异常
-        UncaughtException.getInstance(this)
-
 
         val tokenTypeName = HutApiFunction.parseTokenType(tokenAccept)
 

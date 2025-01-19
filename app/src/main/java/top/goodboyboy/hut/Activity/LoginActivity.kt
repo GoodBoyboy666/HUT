@@ -8,6 +8,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.color.DynamicColors
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -17,7 +18,6 @@ import top.goodboyboy.hut.AuthStatus
 import top.goodboyboy.hut.CheckUpdate
 import top.goodboyboy.hut.GlobalStaticMembers
 import top.goodboyboy.hut.KbFunction
-import top.goodboyboy.hut.R
 import top.goodboyboy.hut.Scode
 import top.goodboyboy.hut.Util.AlertDialogUtil
 import top.goodboyboy.hut.Util.SettingsUtil
@@ -31,23 +31,18 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         val view = binding.root
+        DynamicColors.applyToActivitiesIfAvailable(application)
         setContentView(view)
+
 
         //全局捕捉异常
         UncaughtException.getInstance(this)
 
-        var pageBackground = R.drawable.hut_main_kb_background
-        var buttonBackground = R.drawable.hut_getkb_button
+
         val isDarkMode=KbFunction.checkDarkMode(this)
 
 
-        //暗色模式判定
-        if (isDarkMode) {
-            pageBackground = R.color.black
-            buttonBackground = R.color.grey
-        }
-        binding.main.setBackgroundResource(pageBackground)
-        binding.buttonLogin.setBackgroundResource(buttonBackground)
+
 
         //初始化设置
 
@@ -211,7 +206,7 @@ class LoginActivity : AppCompatActivity() {
 
 //            KbFunction.clearDirectory(internalStorageDir)
 
-                if (!codeList.scode.isNullOrBlank() && !codeList.sxh.isNullOrBlank() && codeList.client != null) {
+                if (::codeList.isInitialized&&!codeList.scode.isNullOrBlank() && !codeList.sxh.isNullOrBlank() && codeList.client != null) {
 
                     CoroutineScope(Dispatchers.Main).launch {
                         val auth: AuthStatus
@@ -258,6 +253,7 @@ class LoginActivity : AppCompatActivity() {
                         }
                     }
                 }else{
+                    binding.progressRelativeLayout.visibility = View.GONE
                     Toast.makeText(this@LoginActivity, "未获取到scode！", Toast.LENGTH_LONG)
                         .show()
                 }

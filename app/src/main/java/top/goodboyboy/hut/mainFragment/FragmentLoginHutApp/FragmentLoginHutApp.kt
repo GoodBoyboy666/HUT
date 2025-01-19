@@ -36,20 +36,14 @@ class FragmentLoginHutApp : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val isDarkMode = KbFunction.checkDarkMode(requireContext())
-        var buttonBackground = R.drawable.hut_getkb_button
         val internalStorageDir = requireContext().filesDir
         val fragmentManager = requireActivity().supportFragmentManager
         val setting= SettingsUtil(requireContext())
 
-        //暗色模式判定
-        if (isDarkMode) {
-            buttonBackground = R.color.grey
-        }
 
         Toast.makeText(requireContext(), "该账号密码为智慧工大账户账号密码！", Toast.LENGTH_SHORT)
             .show()
 
-        binding.buttonLogin.setBackgroundResource(buttonBackground)
 
         binding.buttonLogin.setOnClickListener {
             binding.buttonLogin.visibility = View.GONE
