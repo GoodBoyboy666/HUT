@@ -211,7 +211,7 @@ class LoginActivity : AppCompatActivity() {
 
 //            KbFunction.clearDirectory(internalStorageDir)
 
-                if (!codeList.scode.isNullOrBlank() && !codeList.sxh.isNullOrBlank() && codeList.client != null) {
+                if (::codeList.isInitialized&&!codeList.scode.isNullOrBlank() && !codeList.sxh.isNullOrBlank() && codeList.client != null) {
 
                     CoroutineScope(Dispatchers.Main).launch {
                         val auth: AuthStatus
