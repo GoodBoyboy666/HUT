@@ -3,6 +3,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="?attr/colorSecondaryContainer"
     android:id="@+id/custom_alertdialog">
 
     <TextView
@@ -15,8 +16,7 @@
         android:layout_marginBottom="30dp"
         android:text="Dialog Title"
         android:textSize="20sp"
-        android:textStyle="bold"
-        android:fontFamily="@font/minecraft"/>
+        android:textStyle="bold"/>
 
     <TextView
         android:id="@+id/dialog_message"

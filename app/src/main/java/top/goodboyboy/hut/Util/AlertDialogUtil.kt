@@ -22,17 +22,9 @@ class AlertDialogUtil(val context: Context,
         val titleTextView: TextView = dialogView.findViewById(R.id.dialog_title)
         val messageTextView: TextView = dialogView.findViewById(R.id.dialog_message)
         val positiveButton: Button = dialogView.findViewById(R.id.dialog_positiveButton)
-        var dialogBackground = R.drawable.info_border
-        var okBackground = R.drawable.kb_ok
         titleTextView.text = title
         messageTextView.text = message
 
-        if (isDark) {
-            dialogBackground = R.color.grey
-            okBackground = R.color.grey
-        }
-        dialog.setBackgroundResource(dialogBackground)
-        positiveButton.setBackgroundResource(okBackground)
         builder.setView(dialogView)
         val alertDialog = builder.create()
         if(event==AlertDialogEvent.CUSTOM) {

@@ -52,18 +52,6 @@ class FragmentMe : Fragment() {
         val isDarkMode = KbFunction.checkDarkMode(requireContext())
         val setting = SettingsUtil(requireContext())
 
-        var buttonBackground = R.drawable.hut_getkb_button
-        if (isDarkMode) {
-            buttonBackground = R.color.grey
-        }
-
-        binding.meButtonAbout.setBackgroundResource(buttonBackground)
-        binding.meButtonAuthorPage.setBackgroundResource(buttonBackground)
-        binding.meButtonCleanCache.setBackgroundResource(buttonBackground)
-        binding.meButtonLogout.setBackgroundResource(buttonBackground)
-        binding.meButtonCheckNew.setBackgroundResource(buttonBackground)
-        binding.meButtonLogoutHutApp.setBackgroundResource(buttonBackground)
-
         binding.meButtonLogout.setOnClickListener {
             logoutFun()
         }

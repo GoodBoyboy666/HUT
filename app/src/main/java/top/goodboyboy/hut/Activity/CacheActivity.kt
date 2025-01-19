@@ -39,18 +39,6 @@ class CacheActivity : AppCompatActivity() {
         //捕获全局异常
         UncaughtException.getInstance(this)
 
-        //背景设置
-        var background = R.drawable.hut_main_kb_background
-
-        val isDarkMode = KbFunction.checkDarkMode(this)
-
-        if (isDarkMode) {
-            background = R.color.grey
-        }
-
-        //设置背景
-        binding.main.setBackgroundResource(background)
-
         if (authClient == null) {
             Toast.makeText(this, "获取Client出现异常，请联系开发人员！", Toast.LENGTH_LONG).show()
             finish()

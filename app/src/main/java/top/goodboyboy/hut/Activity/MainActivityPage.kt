@@ -1,23 +1,18 @@
 package top.goodboyboy.hut.Activity
 
-import android.app.AlertDialog
-import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
-import android.widget.Button
-import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.color.DynamicColors
+import com.google.android.material.color.utilities.DynamicColor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -27,8 +22,8 @@ import top.goodboyboy.hut.GlobalStaticMembers
 import top.goodboyboy.hut.KbFunction
 import top.goodboyboy.hut.R
 import top.goodboyboy.hut.Util.AlertDialogUtil
-import top.goodboyboy.hut.mainFragment.FragmentKb.FragmentKb
 import top.goodboyboy.hut.databinding.ActivityMainPageBinding
+import top.goodboyboy.hut.mainFragment.FragmentKb.FragmentKb
 import top.goodboyboy.hut.mainFragment.FragmentMe
 import top.goodboyboy.hut.mainFragment.FragmentTool
 import top.goodboyboy.hut.others.UncaughtException
@@ -46,18 +41,8 @@ class MainActivityPage : AppCompatActivity() {
 
         UncaughtException.getInstance(this)
 
-
         //初始化主题颜色
         val isDarkMode = KbFunction.checkDarkMode(this)
-
-        var hutNavBarColor = R.drawable.hut_nav_bar
-        var bottomBackground = R.drawable.bottom_background
-
-        if (isDarkMode) {
-            binding.mainPage.setBackgroundResource(R.color.black)
-            hutNavBarColor = R.color.grey
-            bottomBackground = R.color.grey
-        }
 
         //检测更新
         CoroutineScope(Dispatchers.IO).launch {
@@ -91,13 +76,9 @@ class MainActivityPage : AppCompatActivity() {
         //初始化toolbar
         val toolbar = binding.toolbar
         setSupportActionBar(toolbar)
-        val toolbarDrawable = ContextCompat.getDrawable(this, hutNavBarColor)
-        toolbar.background = toolbarDrawable
 
         //初始化底部导航栏
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
-        val bottomNavigationViewDrawable = ContextCompat.getDrawable(this, bottomBackground)
-        bottomNavigationView.background = bottomNavigationViewDrawable
 
         bottomNavigationView.setOnItemSelectedListener { menuItem ->
             selectedFragmentId = menuItem.itemId

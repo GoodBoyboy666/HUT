@@ -13,11 +13,6 @@ class SpinnerAdapter(context: Context,
 
     override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
         val view = super.getDropDownView(position, convertView, parent)
-        var spinnerBackground= android.graphics.Color.parseColor("#F4BB6E")
-        if(darkMode){
-            spinnerBackground= android.graphics.Color.parseColor("#141414")
-        }
-        view.setBackgroundColor(spinnerBackground)
         return view
     }
 }
