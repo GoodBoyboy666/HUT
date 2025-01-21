@@ -31,4 +31,7 @@
     <string name="close_button">closeButton</string>
     <string name="user_num">Please enter user num</string>
     <string name="logout_hut_app">logout hut app</string>
+    <string name="program_url_addr">Program url</string>
+    <string name="about_us">About us</string>
+    <string name="setting_text">Settings</string>
 </resources>

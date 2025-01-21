@@ -51,18 +51,10 @@
             android:layout_marginTop="16dp">
 
             <Button
-                android:id="@+id/me_button_about"
+                android:id="@+id/settings_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/about"
-                style="@style/Widget.Material3.Button.OutlinedButton"
-                android:layout_margin="10dp"/>
-
-            <Button
-                android:id="@+id/me_button_author_page"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/author_page"
+                android:text="@string/setting_text"
                 style="@style/Widget.Material3.Button.OutlinedButton"
                 android:layout_margin="10dp"/>
 
@@ -71,13 +63,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/clean_kb_cache"
-                style="@style/Widget.Material3.Button.OutlinedButton"
-                android:layout_margin="10dp"/>
-            <Button
-                android:id="@+id/me_button_check_new"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/check_update"
                 style="@style/Widget.Material3.Button.OutlinedButton"
                 android:layout_margin="10dp"/>
             <Button
