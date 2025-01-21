@@ -33,4 +33,12 @@
     <string name="close_button">closeButton</string>
     <string name="user_num">请输入账号</string>
     <string name="logout_hut_app">注销智慧工大app登录状态</string>
+    <string name="title_activity_settings" translatable="false">SettingsActivity</string>
+
+
+    <string name="program_url_addr">项目地址</string>
+    <string name="author_page_url" translatable="false">https://www.goodboyboy.top</string>
+    <string name="about_us">关于我们</string>
+    <string name="program_url" translatable="false">https://github.com/GoodBoyboy666/HUT</string>
+    <string name="setting_text">设置</string>
 </resources>

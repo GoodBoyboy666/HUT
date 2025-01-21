@@ -1,0 +1,23 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory app:title="@string/about">
+    <Preference
+        app:key="about"
+        app:title="@string/about_us" />
+
+    <Preference
+        app:key="author_page"
+        app:title="@string/author_page"
+        app:summary="@string/author_page_url" />
+
+    <Preference
+        app:key="check_new"
+        app:title="@string/check_update" />
+
+    <Preference
+        app:key="Github"
+        app:title="@string/program_url_addr"
+        app:summary="@string/program_url" />
+    </PreferenceCategory>
+
+</PreferenceScreen>
