@@ -35,10 +35,6 @@ class LoginActivity : AppCompatActivity() {
         setContentView(view)
 
 
-        //全局捕捉异常
-        UncaughtException.getInstance(this)
-
-
         val isDarkMode=KbFunction.checkDarkMode(this)
 
 

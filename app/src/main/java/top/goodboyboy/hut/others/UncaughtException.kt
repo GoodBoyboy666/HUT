@@ -56,11 +56,11 @@ class UncaughtException private constructor(context: Context):Thread.UncaughtExc
     override fun uncaughtException(t: Thread, e: Throwable) {
         handleException(e)
         try {
-            Thread.sleep(2000)
+//            Thread.sleep(2000)
         } catch (e: Exception) {
             Log.e("uncaughtException",e.message?:"Can't get error message")
         }
-//        exitProcess(0)
+        exitProcess(0)
     }
 
     /**
@@ -76,7 +76,7 @@ class UncaughtException private constructor(context: Context):Thread.UncaughtExc
 
         // 跳转到日志显示界面
         val intent = Intent(mContext, ActivityLogViewer::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         intent.putExtra("log_summary", getLogSummary(e))
         mContext.startActivity(intent)
 
@@ -84,6 +84,8 @@ class UncaughtException private constructor(context: Context):Thread.UncaughtExc
          * 这里可以执行一些业务操作
          * 比如保存崩溃日志到文件等等
          */
+        Log.e("uncaughtException",e.message?:"Can't get error message")
+
     }
 
     /**

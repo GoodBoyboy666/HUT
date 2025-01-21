@@ -31,7 +31,7 @@ class BrowseActivity : AppCompatActivity() {
         setContentView(view)
 
         //全局捕捉异常
-        UncaughtException.getInstance(this)
+//        UncaughtException.getInstance(this)
 
         var url = intent.getStringExtra("url") ?: ""
         val jwt = intent.getStringExtra("jwt")
