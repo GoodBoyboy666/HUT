@@ -33,14 +33,9 @@ class LoginActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-        //全局捕捉异常
-        UncaughtException.getInstance(this)
-
         var pageBackground = R.drawable.hut_main_kb_background
         var buttonBackground = R.drawable.hut_getkb_button
         val isDarkMode=KbFunction.checkDarkMode(this)
-
-
         //暗色模式判定
         if (isDarkMode) {
             pageBackground = R.color.black
