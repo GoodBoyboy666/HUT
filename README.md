@@ -15,6 +15,14 @@
 
 ## 开源协议
 
-本项目采用[GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html)开源协议进行授权，但不包括`Restricted resources.txt`与`Unauthorized resources.txt`文件中所列清单内的资源
+本项目内资源与代码除特殊说明外，均采用[GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html)开源协议进行授权，但不包括`Restricted resources.txt`与`Unauthorized resources.txt`文件中所列清单内的资源
 
-本项目的部分图标来自<https://github.com/weui/weui-icon>，遵循MIT协议
+以下图标来自<https://github.com/weui/weui-icon>，遵循MIT协议
+
+* icon_back.xml
+* icon_close.xml
+* icon_pic.xml
+
+以下图标来自<https://github.com/Templarian/MaterialDesign>，遵循[Apache 2.0](https://github.com/Templarian/MaterialDesign/blob/master/LICENSE)协议
+
+* icon_fingerprint.xml

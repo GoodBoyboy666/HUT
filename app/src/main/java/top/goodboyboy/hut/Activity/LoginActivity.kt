@@ -33,14 +33,9 @@ class LoginActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-        //全局捕捉异常
-        UncaughtException.getInstance(this)
-
         var pageBackground = R.drawable.hut_main_kb_background
         var buttonBackground = R.drawable.hut_getkb_button
         val isDarkMode=KbFunction.checkDarkMode(this)
-
-
         //暗色模式判定
         if (isDarkMode) {
             pageBackground = R.color.black
@@ -76,9 +71,15 @@ class LoginActivity : AppCompatActivity() {
 //        }
         //检测是否已经登录
         if (setting.globalSettings.isLogin) {
-            val intent = Intent(this, MainActivityPage::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            startActivity(intent)
+            if(setting.globalSettings.enableBio){
+                val intent=Intent(this,BioActivity::class.java)
+                intent.flags=Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
+            }else {
+                val intent = Intent(this, MainActivityPage::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
+            }
         }
 
 

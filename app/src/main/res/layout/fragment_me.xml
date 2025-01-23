@@ -51,30 +51,16 @@
             android:layout_marginTop="16dp">
 
             <Button
-                android:id="@+id/me_button_about"
+                android:id="@+id/settings_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/about"
+                android:text="@string/setting_text"
                 android:layout_margin="10dp"/>
-
-            <Button
-                android:id="@+id/me_button_author_page"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/author_page"
-                android:layout_margin="10dp"/>
-
             <Button
                 android:id="@+id/me_button_clean_cache"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/clean_kb_cache"
-                android:layout_margin="10dp"/>
-            <Button
-                android:id="@+id/me_button_check_new"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/check_update"
                 android:layout_margin="10dp"/>
             <Button
                 android:id="@+id/me_button_logout_hut_app"

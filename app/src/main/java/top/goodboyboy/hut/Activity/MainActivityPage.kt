@@ -44,9 +44,6 @@ class MainActivityPage : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-        UncaughtException.getInstance(this)
-
-
         //初始化主题颜色
         val isDarkMode = KbFunction.checkDarkMode(this)
 
