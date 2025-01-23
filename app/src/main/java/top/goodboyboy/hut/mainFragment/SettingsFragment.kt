@@ -3,8 +3,12 @@ package top.goodboyboy.hut.mainFragment
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.widget.Toast
+import androidx.biometric.BiometricPrompt
+import androidx.core.content.ContextCompat
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.SwitchPreferenceCompat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -14,6 +18,7 @@ import top.goodboyboy.hut.GlobalStaticMembers
 import top.goodboyboy.hut.KbFunction
 import top.goodboyboy.hut.R
 import top.goodboyboy.hut.Util.AlertDialogUtil
+import top.goodboyboy.hut.Util.BioUtil
 import top.goodboyboy.hut.Util.SettingsUtil
 
 class SettingsFragment : PreferenceFragmentCompat() {
@@ -72,8 +77,8 @@ class SettingsFragment : PreferenceFragmentCompat() {
                             ).show()
                         }
                     }
-                }catch (e:Exception){
-                    withContext(Dispatchers.Main){
+                } catch (e: Exception) {
+                    withContext(Dispatchers.Main) {
                         AlertDialogUtil(
                             requireContext(),
                             "提示",
@@ -92,5 +97,40 @@ class SettingsFragment : PreferenceFragmentCompat() {
             startActivity(intent)
             true
         }
+
+        val bioSwitch = findPreference<SwitchPreferenceCompat>("enable_bio")
+        bioSwitch?.isChecked = setting.globalSettings.enableBio
+
+        val executor = ContextCompat.getMainExecutor(requireContext())
+
+
+        bioSwitch?.setOnPreferenceChangeListener { _, newValue ->
+            val bioStatus=BioUtil().checkBiometricSupport(requireContext())
+            if(bioStatus.status) {
+                val isEnabled = newValue as Boolean
+                if (isEnabled) {
+                    val biometricPrompt = BiometricPrompt(this, executor, object : BiometricPrompt.AuthenticationCallback() {
+                        override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+                            super.onAuthenticationSucceeded(result)
+                            setting.globalSettings.enableBio = true
+                            setting.save()
+                            bioSwitch.isChecked = setting.globalSettings.enableBio
+                        }
+                    })
+
+                    BioUtil().startAuthentication(biometricPrompt)
+                    false
+                } else {
+                    setting.globalSettings.enableBio = false
+                    setting.save()
+                    true
+                }
+            }else{
+                Toast.makeText(requireContext(),bioStatus.reason?:"未知错误",Toast.LENGTH_SHORT).show()
+                false
+            }
+        }
+
+
     }
 }

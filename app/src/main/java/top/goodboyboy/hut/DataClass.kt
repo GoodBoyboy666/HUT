@@ -6,7 +6,8 @@ data class SettingsClass(
     var selectedAPI: Int = 0,
     var reCache: Boolean = false,
     var accessToken: String = "",
-    var isLogin: Boolean = false
+    var isLogin: Boolean = false,
+    var enableBio: Boolean = false
 )
 
 data class UserInfoClass(
