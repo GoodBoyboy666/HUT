@@ -1,5 +1,6 @@
 package top.goodboyboy.hut.Activity
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.method.ScrollingMovementMethod
 import android.widget.TextView
@@ -10,6 +11,7 @@ import androidx.core.view.WindowInsetsCompat
 import top.goodboyboy.hut.R
 
 class ActivityLogViewer : AppCompatActivity() {
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -23,7 +25,7 @@ class ActivityLogViewer : AppCompatActivity() {
         if (!logSummary.isNullOrEmpty()) {
             val textLog: TextView = findViewById(R.id.text_log)
             textLog.movementMethod = ScrollingMovementMethod()
-            textLog.text = logSummary
+            textLog.text = "提供反馈时请将下列信息完整提交给开发人员！！！\n\n${logSummary}"
         }
     }
 }

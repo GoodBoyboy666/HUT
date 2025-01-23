@@ -4,7 +4,9 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.View
 import android.webkit.SslErrorHandler
+import android.webkit.WebChromeClient
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
@@ -31,7 +33,7 @@ class BrowseActivity : AppCompatActivity() {
         setContentView(view)
 
         //全局捕捉异常
-        UncaughtException.getInstance(this)
+//        UncaughtException.getInstance(this)
 
         var url = intent.getStringExtra("url") ?: ""
         val jwt = intent.getStringExtra("jwt")
@@ -68,6 +70,17 @@ class BrowseActivity : AppCompatActivity() {
             }
             private fun isExternalLink(url: String): Boolean {
                 return url.startsWith("weixin") || url.startsWith("bankabc")
+            }
+        }
+        webView.webChromeClient=object :WebChromeClient(){
+            override fun onProgressChanged(view: WebView?, newProgress: Int) {
+                super.onProgressChanged(view, newProgress)
+                if(newProgress<100){
+                    binding.progressBar.visibility=View.VISIBLE
+                    binding.progressBar.progress=newProgress
+                }else{
+                    binding.progressBar.visibility=View.GONE
+                }
             }
         }
 //        webView.webViewClient = object : WebViewClient() {

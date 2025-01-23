@@ -17,8 +17,8 @@ import top.goodboyboy.hut.KbItem
 import top.goodboyboy.hut.KbItems
 import top.goodboyboy.hut.KbParam
 import top.goodboyboy.hut.R
-import top.goodboyboy.hut.databinding.ActivityCacheBinding
 import top.goodboyboy.hut.Util.Hash
+import top.goodboyboy.hut.databinding.ActivityCacheBinding
 import top.goodboyboy.hut.others.UncaughtException
 import java.io.File
 
@@ -36,8 +36,6 @@ class CacheActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-        //捕获全局异常
-        UncaughtException.getInstance(this)
 
         if (authClient == null) {
             Toast.makeText(this, "获取Client出现异常，请联系开发人员！", Toast.LENGTH_LONG).show()
@@ -99,7 +97,9 @@ class CacheActivity : AppCompatActivity() {
                 allkbParam.zhouciSelected
             )
         } else {
-            Toast.makeText(this, "获取课表参数失败！", Toast.LENGTH_LONG).show()
+            withContext(Dispatchers.Main) {
+                Toast.makeText(this@CacheActivity, "获取课表参数失败！", Toast.LENGTH_LONG).show()
+            }
             finish()
         }
     }
@@ -112,7 +112,7 @@ class CacheActivity : AppCompatActivity() {
      * @param kbjcmsid kbjcmsid
      * @param xnxq01id xnxq01id
      */
-    private fun storeKb(kb: KbItems, zhouciSelected: String, kbjcmsid: String, xnxq01id: String) {
+    private suspend fun storeKb(kb: KbItems, zhouciSelected: String, kbjcmsid: String, xnxq01id: String) {
 
         val zhouKb = mutableListOf<KbItem>()
         for (item in kb.kbitems!!) {
@@ -137,9 +137,13 @@ class CacheActivity : AppCompatActivity() {
         }
 
         try {
-            file.createNewFile()
+            withContext(Dispatchers.IO) {
+                file.createNewFile()
+            }
         } catch (e: Exception) {
-            Toast.makeText(this, "无法创建缓存！", Toast.LENGTH_LONG).show()
+            withContext(Dispatchers.IO) {
+                Toast.makeText(this@CacheActivity, "无法创建缓存！", Toast.LENGTH_LONG).show()
+            }
             finish()
         }
 
@@ -182,7 +186,7 @@ class CacheActivity : AppCompatActivity() {
      * @param xnxq01id xnxq01id
      * @param zhouciSelected 已选择的周次
      */
-    private fun cacheKbParam(
+    private suspend fun cacheKbParam(
         zhouci: List<String>,
         kbjcmsid: String,
         xnxq01id: String,
@@ -195,9 +199,13 @@ class CacheActivity : AppCompatActivity() {
             file.delete()
         }
         try {
-            file.createNewFile()
+            withContext(Dispatchers.IO) {
+                file.createNewFile()
+            }
         } catch (e: Exception) {
-            Toast.makeText(this, "写入课表参数失败！", Toast.LENGTH_LONG).show()
+            withContext(Dispatchers.IO) {
+                Toast.makeText(this@CacheActivity, "写入课表参数失败！", Toast.LENGTH_LONG).show()
+            }
             finish()
         }
 
@@ -214,7 +222,7 @@ class CacheActivity : AppCompatActivity() {
      *
      * @param client 已通过身份验证的OkHttpClient
      */
-    private fun storeUserInfo(client: OkHttpClient) {
+    private suspend fun storeUserInfo(client: OkHttpClient) {
         val userInfo = KbFunction.getUserInfo(
             client,
             GlobalStaticMembers.jwxtAPI[GlobalStaticMembers.apiSelected]
@@ -227,9 +235,13 @@ class CacheActivity : AppCompatActivity() {
             file.delete()
         }
         try {
-            file.createNewFile()
+            withContext(Dispatchers.IO) {
+                file.createNewFile()
+            }
         } catch (e: Exception) {
-            Toast.makeText(this, "写入用户信息失败！", Toast.LENGTH_LONG).show()
+            withContext(Dispatchers.IO) {
+                Toast.makeText(this@CacheActivity, "写入用户信息失败！", Toast.LENGTH_LONG).show()
+            }
             finish()
         }
         file.writeText(Gson().toJson(userInfo))

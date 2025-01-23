@@ -35,10 +35,6 @@ class LoginActivity : AppCompatActivity() {
         setContentView(view)
 
 
-        //全局捕捉异常
-        UncaughtException.getInstance(this)
-
-
         val isDarkMode=KbFunction.checkDarkMode(this)
 
 
@@ -71,9 +67,15 @@ class LoginActivity : AppCompatActivity() {
 //        }
         //检测是否已经登录
         if (setting.globalSettings.isLogin) {
-            val intent = Intent(this, MainActivityPage::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            startActivity(intent)
+            if(setting.globalSettings.enableBio){
+                val intent=Intent(this,BioActivity::class.java)
+                intent.flags=Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
+            }else {
+                val intent = Intent(this, MainActivityPage::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
+            }
         }
 
 

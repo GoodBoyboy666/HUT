@@ -30,6 +30,7 @@ import top.goodboyboy.hut.Util.SettingsUtil
 import top.goodboyboy.hut.UserInfoClass
 import top.goodboyboy.hut.Util.AlertDialogUtil
 import top.goodboyboy.hut.databinding.FragmentMeBinding
+import top.goodboyboy.hut.mainFragment.FragmentHutServiceCenter.FragmentHutServiceCenter
 import java.io.File
 
 class FragmentMe : Fragment() {
@@ -51,29 +52,17 @@ class FragmentMe : Fragment() {
         val internalStorageDir = requireContext().filesDir
         val isDarkMode = KbFunction.checkDarkMode(requireContext())
         val setting = SettingsUtil(requireContext())
+        val fragmentManager = requireActivity().supportFragmentManager
+
+        binding.settingsButton.setOnClickListener {
+            fragmentManager.beginTransaction()
+                .setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
+                .replace(R.id.fragmentContainer, SettingsFragment())
+                .commit()
+        }
 
         binding.meButtonLogout.setOnClickListener {
             logoutFun()
-        }
-        binding.meButtonAbout.setOnClickListener {
-//            MainActivityPage.showAlertDialog(
-//                requireContext(),
-//                getString(R.string.about),
-//                getString(R.string.about_info, GlobalStaticMembers.VersionName),
-//                isDarkMode
-//            )
-
-            AlertDialogUtil(
-                requireContext(),
-                getString(R.string.about),
-                getString(R.string.about_info, GlobalStaticMembers.VersionName),
-                isDarkMode
-            ).show()
-        }
-        binding.meButtonAuthorPage.setOnClickListener {
-            val url = "https://www.goodboyboy.top"
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-            startActivity(intent)
         }
         binding.meButtonCleanCache.setOnClickListener {
             val intent = Intent(requireContext(), LoginActivity::class.java)
@@ -106,64 +95,6 @@ class FragmentMe : Fragment() {
 //            }
         }
 
-        binding.meButtonCheckNew.setOnClickListener {
-            CoroutineScope(Dispatchers.IO).launch {
-                try {
-                    val status = CheckUpdate.getLatestVersionFromGitea()
-                    if (status.isSuccess) {
-//                    showNewVersionAlertDialog(
-//                        requireContext(),
-//                        "检测到新版本" + " " + status.versionInfo?.verName,
-//                        status.versionInfo?.verBody ?: "未获取到更新说明",
-//                        status.versionInfo?.verUrl ?: "https://git.goodboyboy.top/goodboyboy/HUT",
-//                        isDarkMode
-//                    )
-                        withContext(Dispatchers.Main) {
-                            AlertDialogUtil(
-                                requireContext(),
-                                "检测到新版本" + " " + status.versionInfo?.verName,
-                                status.versionInfo?.verBody ?: "未获取到更新说明",
-                                isDarkMode,
-                                AlertDialogUtil.AlertDialogEvent.CUSTOM
-                            ) {
-                                val intent = Intent(
-                                    Intent.ACTION_VIEW,
-                                    Uri.parse(
-                                        status.versionInfo?.verUrl
-                                            ?: "https://git.goodboyboy.top/goodboyboy/HUT"
-                                    )
-                                )
-                                startActivity(intent)
-                            }.show()
-                        }
-                    } else {
-//                    MainActivityPage.showAlertDialog(
-//                        requireContext(),
-//                        "提示",
-//                        status.reason ?: "检查更新失败！",
-//                        isDarkMode
-//                    )
-                        withContext(Dispatchers.Main) {
-                            AlertDialogUtil(
-                                requireContext(),
-                                "提示",
-                                status.reason ?: "检查更新失败！",
-                                isDarkMode,
-                            ).show()
-                        }
-                    }
-                }catch (e:Exception){
-                    withContext(Dispatchers.Main){
-                        AlertDialogUtil(
-                            requireContext(),
-                            "提示",
-                            e.message ?: "检查更新失败！",
-                            isDarkMode,
-                        ).show()
-                    }
-                }
-            }
-        }
 
         binding.meButtonLogoutHutApp.setOnClickListener {
 //            val fileName = "settings.txt"
