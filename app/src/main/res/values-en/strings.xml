@@ -34,4 +34,5 @@
     <string name="program_url_addr">Program url</string>
     <string name="about_us">About us</string>
     <string name="setting_text">Settings</string>
+    <string name="bio_auth_text">Please complete biometric verification</string>
 </resources>

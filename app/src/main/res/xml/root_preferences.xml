@@ -1,5 +1,11 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <PreferenceCategory app:title="生物解锁">
+        <SwitchPreferenceCompat
+            app:key="enable_bio"
+            app:title="启用生物解锁"
+            app:summary="开启后每次启动将会验证身份"/>
+    </PreferenceCategory>
     <PreferenceCategory app:title="@string/about">
     <Preference
         app:key="about"
