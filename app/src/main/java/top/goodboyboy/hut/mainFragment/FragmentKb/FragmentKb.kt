@@ -1,6 +1,5 @@
 package top.goodboyboy.hut.mainFragment.FragmentKb
 
-import android.R
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,8 +8,10 @@ import android.widget.AdapterView
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.coroutines.SupervisorJob
+import top.goodboyboy.hut.Activity.MainActivityPageViewModel
 import top.goodboyboy.hut.GridAdapterItems
 import top.goodboyboy.hut.GridHeaderAdapterItems
 import top.goodboyboy.hut.Util.Hash
@@ -27,6 +28,7 @@ class FragmentKb : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var viewmodel: FragmentKbViewModel
+    private val mainActivityPageViewModel: MainActivityPageViewModel by activityViewModels()
 
     private lateinit var adapter: KbAdapter
     private lateinit var spinner: Spinner
@@ -49,11 +51,19 @@ class FragmentKb : Fragment() {
 
 
         val isDarkMode = KbFunction.checkDarkMode(requireContext())
+        if(!mainActivityPageViewModel.isLoad){
+            viewmodel.initKbParam()
+            mainActivityPageViewModel.zhouciSelectedIndex=viewmodel.zhouciSelectedIndex
+            mainActivityPageViewModel.zhouciSelected=viewmodel.zhouciSelected
+            mainActivityPageViewModel.zhouci=viewmodel.zhouci
+            mainActivityPageViewModel.kbjcmsid=viewmodel.kbjcmsid
+            mainActivityPageViewModel.xnxq01id=viewmodel.xnxq01id
+        }
 
 
         //初始化课表View布局
         val gridView = binding.kbGrid
-        val gridAdapterItems = GridAdapterItems(viewmodel.allitems, viewmodel.allinfos)
+        val gridAdapterItems = GridAdapterItems(mainActivityPageViewModel.allItems, mainActivityPageViewModel.allInfos)
         adapter = KbAdapter(requireContext(), gridAdapterItems, isDarkMode)
         gridView.adapter = adapter
 
@@ -72,10 +82,10 @@ class FragmentKb : Fragment() {
         spinner = binding.zhouciSpinner
 
         val spinnerAdapter =
-            SpinnerAdapter(requireContext(), R.layout.simple_spinner_item, viewmodel.zhouci,isDarkMode)
-        spinnerAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item)
+            SpinnerAdapter(requireContext(), android.R.layout.simple_spinner_item, mainActivityPageViewModel.zhouci,isDarkMode)
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = spinnerAdapter
-        spinner.setSelection(viewmodel.zhouciSelectedIndex)
+        spinner.setSelection(mainActivityPageViewModel.zhouciSelectedIndex)
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>?,
@@ -84,8 +94,8 @@ class FragmentKb : Fragment() {
                 id: Long
             ) {
                 val selectedItem = parent?.getItemAtPosition(position) as String
-                viewmodel.zhouciSelected = selectedItem
-                viewmodel.zhouciSelectedIndex = position
+                mainActivityPageViewModel.zhouciSelected = selectedItem
+                mainActivityPageViewModel.zhouciSelectedIndex = position
 //                loadKb(userNum, userPasswd)
                 loadKb()
             }
@@ -110,7 +120,10 @@ class FragmentKb : Fragment() {
 //            viewmodel.isFirst = false
 //            loadKb()
 //        }
-        loadKb()
+        if(!mainActivityPageViewModel.isLoad) {
+            loadKb()
+            mainActivityPageViewModel.isLoad=true
+        }
     }
 
 
@@ -127,9 +140,9 @@ class FragmentKb : Fragment() {
 
         val internalStorageDir = requireContext().filesDir
         val fileName = Hash.hash(
-            viewmodel.zhouciSelected +
-                    viewmodel.kbjcmsid +
-                    viewmodel.xnxq01id
+            mainActivityPageViewModel.zhouciSelected +
+                    mainActivityPageViewModel.kbjcmsid +
+                    mainActivityPageViewModel.xnxq01id
         )
 
         val kbItems = KbFunction.getKbFromFile(
@@ -149,8 +162,8 @@ class FragmentKb : Fragment() {
     private fun flushUI(kbItems: KbItemsAsList) {
         if (kbItems.isOk) {
 
-            viewmodel.allitems.clear()
-            viewmodel.allinfos.clear()
+            mainActivityPageViewModel.allItems.clear()
+            mainActivityPageViewModel.allInfos.clear()
 
 //            for (item in kbitems.kbitems!!) {
 //                for (kb in item) {
@@ -165,8 +178,8 @@ class FragmentKb : Fragment() {
 //            }
 
             for (item in kbItems.kbitems!!) {
-                viewmodel.allitems.add(item.title)
-                viewmodel.allinfos.add(item.infos)
+                mainActivityPageViewModel.allItems.add(item.title)
+                mainActivityPageViewModel.allInfos.add(item.infos)
             }
 
 
@@ -189,7 +202,7 @@ class FragmentKb : Fragment() {
 
 //            binding.zhouciLinearLayout.visibility = View.VISIBLE
         } else {
-            Toast.makeText(requireContext(), kbItems.reason ?: "未知错误！", Toast.LENGTH_LONG)
+            Toast.makeText(requireContext(), kbItems.reason ?: "未知错误！", Toast.LENGTH_SHORT)
                 .show()
         }
 
