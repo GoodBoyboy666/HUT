@@ -43,7 +43,8 @@ class BrowseActivity : AppCompatActivity() {
 
         val tokenTypeName = HutApiFunction.parseTokenType(tokenAccept)
 
-
+        //关闭性能监控
+        WebView.setWebContentsDebuggingEnabled(false)
         val webView = binding.browseWebView
         webView.settings.javaScriptEnabled = true
         webView.settings.useWideViewPort = true
