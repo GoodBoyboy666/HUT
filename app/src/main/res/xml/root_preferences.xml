@@ -24,6 +24,9 @@
         app:key="Github"
         app:title="@string/program_url_addr"
         app:summary="@string/program_url" />
+    <Preference
+        app:key="OpenSourceLicense"
+        app:title="@string/open_source_notices"/>
     </PreferenceCategory>
 
 </PreferenceScreen>

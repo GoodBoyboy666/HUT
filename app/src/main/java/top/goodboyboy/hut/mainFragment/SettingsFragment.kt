@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -131,6 +132,10 @@ class SettingsFragment : PreferenceFragmentCompat() {
             }
         }
 
-
+        findPreference<Preference>("OpenSourceLicense")?.setOnPreferenceClickListener {
+            val intent = Intent(requireContext(), OssLicensesMenuActivity::class.java)
+            startActivity(intent)
+            true
+        }
     }
 }

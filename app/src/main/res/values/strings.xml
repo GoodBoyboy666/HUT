@@ -42,4 +42,5 @@
     <string name="program_url" translatable="false">https://github.com/GoodBoyboy666/HUT</string>
     <string name="setting_text">设置</string>
     <string name="bio_auth_text">请完成生物验证</string>
+    <string name="open_source_notices">开放源代码许可</string>
 </resources>
