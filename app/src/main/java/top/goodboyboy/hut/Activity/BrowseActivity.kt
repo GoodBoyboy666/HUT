@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import android.webkit.CookieManager
 import android.webkit.SslErrorHandler
 import android.webkit.WebChromeClient
 import android.webkit.WebResourceError
@@ -70,6 +71,24 @@ class BrowseActivity : AppCompatActivity() {
             private fun isExternalLink(url: String): Boolean {
                 return url.startsWith("weixin") || url.startsWith("bankabc")
             }
+//            //only for test
+//            override fun onReceivedSslError(
+//                view: WebView?,
+//                handler: SslErrorHandler?,
+//                error: android.net.http.SslError?
+//            ) {
+//                // 忽略 SSL 证书错误
+//                handler?.proceed()
+//            }
+//
+//            override fun onReceivedError(
+//                view: WebView?,
+//                request: WebResourceRequest?,
+//                error: WebResourceError?
+//            ) {
+//                super.onReceivedError(view, request, error)
+//                // 处理其他错误
+//            }
         }
         webView.webChromeClient=object :WebChromeClient(){
             override fun onProgressChanged(view: WebView?, newProgress: Int) {
@@ -105,12 +124,20 @@ class BrowseActivity : AppCompatActivity() {
 //            ///
 //        }
 
-        if (tokenTypeName.urlTokenKeyName != "") {
-            val uriObj = Uri.parse(url)
-            val builder = uriObj.buildUpon()
-            builder.appendQueryParameter(tokenTypeName.urlTokenKeyName, jwt)
-            url = builder.build().toString()
+
+        val uriObj = Uri.parse(url)
+        val builder = uriObj.buildUpon()
+        if(uriObj.host=="mycas.hut.edu.cn"){
+            builder.appendQueryParameter("idToken", jwt)
         }
+
+        if (tokenTypeName.urlTokenKeyName != "") {
+            builder.appendQueryParameter(tokenTypeName.urlTokenKeyName, jwt)
+        }
+        url = builder.build().toString()
+
+        val cookieString = "userToken=${jwt}; Path=/"
+        CookieManager.getInstance().setCookie(url, cookieString)
 
         if (tokenTypeName.headerTokenKeyName != "") {
             val header = mapOf(

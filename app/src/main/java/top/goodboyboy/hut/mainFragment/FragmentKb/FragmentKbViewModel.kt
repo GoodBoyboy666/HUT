@@ -9,8 +9,6 @@ import java.io.File
 
 class FragmentKbViewModel(private val application: Application) : AndroidViewModel(application) {
 
-    var allitems = List(40) { "" }.toMutableList()
-    var allinfos = List(40) { "N/A" }.toMutableList()
     val kbHead =
         listOf("课表", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六", "星期日")
 //    var isFirst = true
@@ -27,12 +25,12 @@ class FragmentKbViewModel(private val application: Application) : AndroidViewMod
 
     init {
 
-        initKbParam()
+//        initKbParam()
 
 //        initUserPasswd()
     }
 
-    private fun initKbParam() {
+    fun initKbParam() {
         val internalStorageDir = application.filesDir
         val fileName = "kbParam.txt"
         val file = File(internalStorageDir, fileName)
@@ -55,7 +53,7 @@ class FragmentKbViewModel(private val application: Application) : AndroidViewMod
             zhouciSelected = jsonObject["zhouciSelected"].asString
             zhouciSelectedIndex = zhouciSelected.toInt() - 1
         } else {
-            Toast.makeText(application, "读取课表参数失败，建议手动清除数据！", Toast.LENGTH_LONG)
+            Toast.makeText(application, "读取课表参数失败！", Toast.LENGTH_SHORT)
                 .show()
         }
     }

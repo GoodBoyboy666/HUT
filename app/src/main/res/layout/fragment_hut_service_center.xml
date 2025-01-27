@@ -5,7 +5,14 @@
     android:layout_height="match_parent"
     tools:context=".mainFragment.FragmentHutServiceCenter.FragmentHutServiceCenter">
 
-
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/serviceCenterSwipeRefreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp">
     <GridView
         android:id="@+id/service_gridview"
         android:layout_width="match_parent"
@@ -15,6 +22,7 @@
         android:layout_marginTop="10dp"
         android:numColumns="5"
         android:gravity="center"/>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     <RelativeLayout
         android:id="@+id/progress_relativeLayout"
         android:layout_width="match_parent"
@@ -23,7 +31,8 @@
         android:background="#80000000"
         android:clickable="true"
         android:focusable="true"
-        android:gravity="center">
+        android:gravity="center"
+        android:visibility="gone">
 
         <ProgressBar
             android:id="@+id/progressBar"
