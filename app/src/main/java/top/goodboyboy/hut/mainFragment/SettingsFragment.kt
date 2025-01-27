@@ -15,6 +15,7 @@ import androidx.preference.SwitchPreferenceCompat
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import top.goodboyboy.hut.CheckUpdate
@@ -27,6 +28,8 @@ import top.goodboyboy.hut.Util.SettingsUtil
 import java.io.File
 
 class SettingsFragment : PreferenceFragmentCompat() {
+    private var cleanCacheJob: Job? = null
+    private var countCacheSize:Job?=null
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.root_preferences, rootKey)
 
@@ -144,7 +147,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
         val cleanWebViewCache=findPreference<Preference>("clean_webView_cache")
         cleanWebViewCache?.setOnPreferenceClickListener {
-            CoroutineScope(Dispatchers.IO).launch {
+            cleanCacheJob=CoroutineScope(Dispatchers.IO).launch {
                 WebStorage.getInstance().deleteAllData()
                 context?.deleteDatabase("webview.db")
                 context?.deleteDatabase("webviewCache.db")
@@ -170,7 +173,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
             }
             true
         }
-        CoroutineScope(Dispatchers.IO).launch {
+        countCacheSize= CoroutineScope(Dispatchers.IO).launch {
             val cacheDir = context?.cacheDir
             val webViewCacheDir = context?.getDir("webview", Context.MODE_PRIVATE)
             var totalCacheSize=0L
@@ -214,5 +217,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
     override fun onDestroy() {
         super.onDestroy()
+        cleanCacheJob?.cancel()
+        countCacheSize?.cancel()
     }
 }
