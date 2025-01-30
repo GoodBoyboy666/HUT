@@ -46,81 +46,7 @@ class FragmentHutServiceCenter : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val setting = SettingsUtil(requireContext())
-        binding.progressRelativeLayout.visibility=View.VISIBLE
-//        val internalStorageDir = requireContext().filesDir
-//        val fragmentManager = requireActivity().supportFragmentManager
-
-//        val fileName = "settings.txt"
-//        val file = File(internalStorageDir, fileName)
-//
-//        var findAccessToken = false
-//        if (file.exists()) {
-//            val fileText = file.readText()
-//            if (fileText != "") {
-//                findAccessToken = true
-//                val settings =
-//                    Gson().fromJson(file.readText(), SettingsClass::class.java)
-//
-//                if(mainActivityPageViewModel.serviceList!="")
-//                {
-//                    showServiceListFromObject(
-//                        mainActivityPageViewModel.serviceList,
-//                        KbFunction.checkDarkMode(requireContext()),
-//                        settings.accessToken
-//                    )
-//                }else {
-//
-//                    job = CoroutineScope(Dispatchers.IO).launch {
-//                        try {
-//                            val serviceList = HutApiFunction.getServiceList(settings.accessToken)
-//                            if (serviceList.isOk && serviceList.serviceList != null) {
-//                                // 显示Service
-//                                withContext(Dispatchers.Main) {
-//                                    mainActivityPageViewModel.serviceList = serviceList.serviceList
-//                                    showServiceListFromObject(
-//                                        serviceList.serviceList,
-//                                        KbFunction.checkDarkMode(requireContext()),
-//                                        settings.accessToken
-//                                    )
-//                                }
-//                            } else {
-//                                withContext(Dispatchers.Main) {
-//                                    Toast.makeText(
-//                                        requireContext(),
-//                                        serviceList.errorMessage,
-//                                        Toast.LENGTH_SHORT
-//                                    )
-//                                        .show()
-//
-//                                    withContext(Dispatchers.IO) {
-//                                        settings.accessToken = ""
-//                                        val writer = FileWriter(file, false)
-//                                        writer.write(Gson().toJson(settings))
-//                                        writer.close()
-//                                    }
-//                                    fragmentManager.beginTransaction()
-//                                        .setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
-//                                        .replace(R.id.fragmentContainer, FragmentTool())
-//                                        .commit()
-//                                }
-//                            }
-//                        } catch (e: Exception) {
-//                            withContext(Dispatchers.Main) {
-//                                Toast.makeText(requireContext(), e.message, Toast.LENGTH_LONG)
-//                                    .show()
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//        if (!findAccessToken) {
-//            Toast.makeText(requireContext(), "未找到配置文件", Toast.LENGTH_SHORT).show()
-//            fragmentManager.beginTransaction()
-//                .setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
-//                .replace(R.id.fragmentContainer, FragmentTool())
-//                .commit()
-//        }
+        binding.progressRelativeLayout.visibility = View.VISIBLE
 
         val serviceItems = getServiceListFromFile()
 
@@ -130,14 +56,22 @@ class FragmentHutServiceCenter : Fragment() {
                 KbFunction.checkDarkMode(requireContext()),
                 setting.globalSettings.accessToken
             )
-            binding.progressRelativeLayout.visibility=View.GONE
+            showFrequentServiceList(
+                KbFunction.checkDarkMode(requireContext()),
+                setting.globalSettings.accessToken
+            )
+            binding.progressRelativeLayout.visibility = View.GONE
         } else if (serviceItems != null) {
             showServiceListFromObject(
                 serviceItems,
                 KbFunction.checkDarkMode(requireContext()),
                 setting.globalSettings.accessToken
             )
-            binding.progressRelativeLayout.visibility=View.GONE
+            showFrequentServiceList(
+                KbFunction.checkDarkMode(requireContext()),
+                setting.globalSettings.accessToken
+            )
+            binding.progressRelativeLayout.visibility = View.GONE
         } else {
             job = CoroutineScope(Dispatchers.IO).launch {
                 try {
@@ -147,8 +81,12 @@ class FragmentHutServiceCenter : Fragment() {
                         // 显示Service
                         withContext(Dispatchers.Main) {
                             mainActivityPageViewModel.serviceListString = serviceList.serviceList
-                            val serviceItemsObject=showServiceListFromString(
+                            val serviceItemsObject = showServiceListFromString(
                                 serviceList.serviceList,
+                                KbFunction.checkDarkMode(requireContext()),
+                                setting.globalSettings.accessToken
+                            )
+                            showFrequentServiceList(
                                 KbFunction.checkDarkMode(requireContext()),
                                 setting.globalSettings.accessToken
                             )
@@ -173,7 +111,7 @@ class FragmentHutServiceCenter : Fragment() {
                             .show()
                     }
                 }
-                binding.progressRelativeLayout.visibility=View.GONE
+                binding.progressRelativeLayout.visibility = View.GONE
             }
         }
 
@@ -185,12 +123,12 @@ class FragmentHutServiceCenter : Fragment() {
                     if (serviceList.isOk && serviceList.serviceList != null) {
                         withContext(Dispatchers.Main) {
                             mainActivityPageViewModel.serviceListString = serviceList.serviceList
-                            val serviceItemsObject= showServiceListFromString(
+                            val serviceItemsObject = showServiceListFromString(
                                 serviceList.serviceList,
                                 KbFunction.checkDarkMode(requireContext()),
                                 setting.globalSettings.accessToken
                             )
-                            binding.serviceCenterSwipeRefreshLayout.isRefreshing=false
+                            binding.serviceCenterSwipeRefreshLayout.isRefreshing = false
                             CoroutineScope(Dispatchers.IO).launch {
                                 cacheServiceList(serviceItemsObject)
                             }
@@ -216,7 +154,11 @@ class FragmentHutServiceCenter : Fragment() {
 
     }
 
-    private fun showServiceListFromString(stringJson: String, isDark: Boolean, jwt: String):MutableList<ServiceItem> {
+    private fun showServiceListFromString(
+        stringJson: String,
+        isDark: Boolean,
+        jwt: String
+    ): MutableList<ServiceItem> {
         val jsonObject = JsonParser.parseString(stringJson)
         val serviceItems = mutableListOf<ServiceItem>()
         for (classify in jsonObject.asJsonObject.get("data").asJsonArray) {
@@ -242,6 +184,46 @@ class FragmentHutServiceCenter : Fragment() {
         jwt: String
     ) {
         binding.serviceGridview.adapter =
+            ServiceListAdapter(requireContext(), serviceList, isDark, jwt)
+    }
+
+    private fun showFrequentServiceList(
+        isDark: Boolean,
+        jwt: String
+    ) {
+        val serviceList = listOf(
+            ServiceItem(
+                "https://portal.hut.edu.cn/portal-minio/service/947钱包_1685355992559.png",
+                "校园卡",
+                "https://v8mobile.hut.edu.cn/homezzdx/openHomePage",
+                "[{\"tokenType\":\"url\",\"tokenKey\":\"X-Id-Token\"}]"
+            ),
+            ServiceItem(
+                "https://portal.hut.edu.cn/portal-minio/service/充值_1735025220964.png",
+                "校园卡充值",
+                "https://hub.17wanxiao.com/bsacs/light.action?flag=supwisdomapp_hngydxsw&ecardFunc=recharge",
+                "[{\"tokenType\":\"url\",\"tokenKey\":\"token\"}]"
+            ),
+            ServiceItem(
+                "https://portal.hut.edu.cn/portal-minio/service/9_26__1685350007771.png",
+                "用水服务",
+                "https://v8mobile.hut.edu.cn/zdRedirect/toSingleMenu?code=openWater",
+                "[{\"tokenType\":\"header\",\"tokenKey\":\"X-Id-Token\"},{\"tokenType\":\"url\",\"tokenKey\":\"token\"}]"
+                ),
+            ServiceItem(
+                "https://portal.hut.edu.cn/portal-minio/service/9_9__1685350006675.png",
+                "电费充值",
+                "https://v8mobile.hut.edu.cn/zdRedirect/toSingleMenu?code=openElePay",
+                "[{\"tokenType\":\"url\",\"tokenKey\":\"X-Id-Token\"}]"
+            ),
+            ServiceItem(
+                "https://portal.hut.edu.cn/portal-minio/service/教务_1__1733368821328.png",
+                "教务综合服务",
+                "https://mycas.hut.edu.cn/cas/login?service=https%3A%2F%2Fjwxtsj.hut.edu.cn%2Fnjwhd%2FloginSso",
+                "[{\"tokenType\":\"url\",\"tokenKey\":\"token\"}]"
+            )
+        )
+        binding.frequentlyServiceGridview.adapter =
             ServiceListAdapter(requireContext(), serviceList, isDark, jwt)
     }
 
