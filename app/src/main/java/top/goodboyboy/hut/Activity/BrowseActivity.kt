@@ -70,7 +70,7 @@ class BrowseActivity : AppCompatActivity() {
                 return false
             }
             private fun isExternalLink(url: String): Boolean {
-                return url.startsWith("weixin") || url.startsWith("bankabc")
+                return url.startsWith("weixin") || url.startsWith("bankabc")||url.startsWith("alipays")
             }
 //            //only for test
 //            override fun onReceivedSslError(

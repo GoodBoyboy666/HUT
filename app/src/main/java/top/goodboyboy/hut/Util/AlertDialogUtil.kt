@@ -9,12 +9,17 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import top.goodboyboy.hut.R
 
-class AlertDialogUtil(val context: Context,
-                      val title: String,
-                      val message: String,
-                      val isDark: Boolean, val event: AlertDialogEvent=AlertDialogEvent.DEFAULT, val onClickListener: (View) -> Unit={}) {
+class AlertDialogUtil(
+    val context: Context,
+    val title: String,
+    val message: String,
+    val isDark: Boolean,
+    val event: AlertDialogEvent = AlertDialogEvent.DEFAULT,
+    val type: AlertDialogType = AlertDialogType.DEFAULT,
+    val onClickListener: (View) -> Unit = {}
+) {
 
-    fun show(){
+    fun show() {
         val builder = AlertDialog.Builder(context)
         val inflater = LayoutInflater.from(context)
         val dialogView: View = inflater.inflate(R.layout.custom_dialog, null)
@@ -22,6 +27,7 @@ class AlertDialogUtil(val context: Context,
         val titleTextView: TextView = dialogView.findViewById(R.id.dialog_title)
         val messageTextView: TextView = dialogView.findViewById(R.id.dialog_message)
         val positiveButton: Button = dialogView.findViewById(R.id.dialog_positiveButton)
+        val customButton:Button=dialogView.findViewById(R.id.dialog_customButton)
         var dialogBackground = R.drawable.info_border
         var okBackground = R.drawable.kb_ok
         titleTextView.text = title
@@ -33,20 +39,36 @@ class AlertDialogUtil(val context: Context,
         }
         dialog.setBackgroundResource(dialogBackground)
         positiveButton.setBackgroundResource(okBackground)
+        customButton.setBackgroundResource(okBackground)
         builder.setView(dialogView)
         val alertDialog = builder.create()
-        if(event==AlertDialogEvent.CUSTOM) {
+        if (event == AlertDialogEvent.CUSTOM) {
             positiveButton.setOnClickListener(onClickListener)
-        }else if(event==AlertDialogEvent.DEFAULT){
+        } else if (event == AlertDialogEvent.DEFAULT) {
             positiveButton.setOnClickListener {
+                alertDialog.dismiss()
+            }
+        }
+        if(type==AlertDialogType.DEFAULT){
+            customButton.visibility=View.GONE
+        }else if(type==AlertDialogType.NEW_VERSION){
+            customButton.setOnClickListener {
+                val setting=SettingsUtil(context)
+                setting.globalSettings.noMoreReminders=true
+                setting.save()
                 alertDialog.dismiss()
             }
         }
         alertDialog.show()
     }
 
-    enum class AlertDialogEvent{
+    enum class AlertDialogEvent {
         DEFAULT,
         CUSTOM
+    }
+
+    enum class AlertDialogType {
+        DEFAULT,
+        NEW_VERSION
     }
 }
