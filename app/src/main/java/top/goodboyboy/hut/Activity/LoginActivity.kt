@@ -121,31 +121,34 @@ class LoginActivity : AppCompatActivity() {
             GlobalStaticMembers.apiSelected = setting.globalSettings.selectedAPI
 
             //检测更新
-            CoroutineScope(Dispatchers.IO).launch {
-                try {
-                    val status = CheckUpdate.getLatestVersionFromGitea()
-                    withContext(Dispatchers.Main) {
-                        if (status.isSuccess) {
-                            AlertDialogUtil(
-                                this@LoginActivity,
-                                "检测到新版本" + " " + status.versionInfo?.verName,
-                                status.versionInfo?.verBody ?: "未获取到更新说明",
-                                isDarkMode,
-                                AlertDialogUtil.AlertDialogEvent.CUSTOM
-                            ) {
-                                val intent = Intent(
-                                    Intent.ACTION_VIEW,
-                                    Uri.parse(
-                                        status.versionInfo?.verUrl
-                                            ?: "https://git.goodboyboy.top/goodboyboy/HUT"
+            if(!setting.globalSettings.noMoreReminders) {
+                CoroutineScope(Dispatchers.IO).launch {
+                    try {
+                        val status = CheckUpdate.getLatestVersionFromGitea()
+                        withContext(Dispatchers.Main) {
+                            if (status.isSuccess) {
+                                AlertDialogUtil(
+                                    this@LoginActivity,
+                                    "检测到新版本" + " " + status.versionInfo?.verName,
+                                    status.versionInfo?.verBody ?: "未获取到更新说明",
+                                    isDarkMode,
+                                    AlertDialogUtil.AlertDialogEvent.CUSTOM,
+                                    AlertDialogUtil.AlertDialogType.NEW_VERSION
+                                ) {
+                                    val intent = Intent(
+                                        Intent.ACTION_VIEW,
+                                        Uri.parse(
+                                            status.versionInfo?.verUrl
+                                                ?: "https://git.goodboyboy.top/goodboyboy/HUT"
+                                        )
                                     )
-                                )
-                                startActivity(intent)
-                            }.show()
+                                    startActivity(intent)
+                                }.show()
+                            }
                         }
-                    }
-                }catch (_:Exception){
+                    } catch (_: Exception) {
 
+                    }
                 }
             }
 

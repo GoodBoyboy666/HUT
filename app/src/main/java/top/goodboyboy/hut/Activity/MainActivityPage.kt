@@ -27,6 +27,7 @@ import top.goodboyboy.hut.GlobalStaticMembers
 import top.goodboyboy.hut.KbFunction
 import top.goodboyboy.hut.R
 import top.goodboyboy.hut.Util.AlertDialogUtil
+import top.goodboyboy.hut.Util.SettingsUtil
 import top.goodboyboy.hut.mainFragment.FragmentKb.FragmentKb
 import top.goodboyboy.hut.databinding.ActivityMainPageBinding
 import top.goodboyboy.hut.mainFragment.FragmentMe
@@ -56,32 +57,37 @@ class MainActivityPage : AppCompatActivity() {
             bottomBackground = R.color.grey
         }
 
-        //检测更新
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val status = CheckUpdate.getLatestVersionFromGitea()
-                withContext(Dispatchers.Main) {
-                    if (status.isSuccess) {
-                        AlertDialogUtil(
-                            this@MainActivityPage,
-                            "检测到新版本" + " " + status.versionInfo?.verName,
-                            status.versionInfo?.verBody ?: "未获取到更新说明",
-                            isDarkMode,
-                            AlertDialogUtil.AlertDialogEvent.CUSTOM
-                        ) {
-                            val intent = Intent(
-                                Intent.ACTION_VIEW,
-                                Uri.parse(
-                                    status.versionInfo?.verUrl
-                                        ?: "https://git.goodboyboy.top/goodboyboy/HUT"
-                                )
-                            )
-                            startActivity(intent)
-                        }.show()
-                    }
-                }
-            }catch (_:Exception){
+        val setting=SettingsUtil(this)
 
+        //检测更新
+        if(!setting.globalSettings.noMoreReminders) {
+            CoroutineScope(Dispatchers.IO).launch {
+                try {
+                    val status = CheckUpdate.getLatestVersionFromGitea()
+                    withContext(Dispatchers.Main) {
+                        if (status.isSuccess) {
+                            AlertDialogUtil(
+                                this@MainActivityPage,
+                                "检测到新版本" + " " + status.versionInfo?.verName,
+                                status.versionInfo?.verBody ?: "未获取到更新说明",
+                                isDarkMode,
+                                AlertDialogUtil.AlertDialogEvent.CUSTOM,
+                                AlertDialogUtil.AlertDialogType.NEW_VERSION
+                            ) {
+                                val intent = Intent(
+                                    Intent.ACTION_VIEW,
+                                    Uri.parse(
+                                        status.versionInfo?.verUrl
+                                            ?: "https://git.goodboyboy.top/goodboyboy/HUT"
+                                    )
+                                )
+                                startActivity(intent)
+                            }.show()
+                        }
+                    }
+                } catch (_: Exception) {
+
+                }
             }
         }
 

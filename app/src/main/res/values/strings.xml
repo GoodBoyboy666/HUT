@@ -43,4 +43,7 @@
     <string name="setting_text">设置</string>
     <string name="bio_auth_text">请完成生物验证</string>
     <string name="open_source_notices">开放源代码许可</string>
+    <string name="all_tools_text">全部工具</string>
+    <string name="frequently_used_tools">常用工具</string>
+    <string name="no_more_reminders">不再提醒</string>
 </resources>
