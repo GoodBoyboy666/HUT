@@ -1,18 +1,11 @@
 package top.goodboyboy.hut.Activity
 
-import android.app.AlertDialog
-import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
-import android.widget.Button
-import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -32,7 +25,6 @@ import top.goodboyboy.hut.mainFragment.FragmentKb.FragmentKb
 import top.goodboyboy.hut.databinding.ActivityMainPageBinding
 import top.goodboyboy.hut.mainFragment.FragmentMe
 import top.goodboyboy.hut.mainFragment.FragmentTool
-import top.goodboyboy.hut.others.UncaughtException
 
 class MainActivityPage : AppCompatActivity() {
     private lateinit var binding: ActivityMainPageBinding
@@ -57,10 +49,10 @@ class MainActivityPage : AppCompatActivity() {
             bottomBackground = R.color.grey
         }
 
-        val setting=SettingsUtil(this)
+        val setting = SettingsUtil(this)
 
         //检测更新
-        if(!setting.globalSettings.noMoreReminders) {
+        if (!setting.globalSettings.noMoreReminders) {
             CoroutineScope(Dispatchers.IO).launch {
                 try {
                     val status = CheckUpdate.getLatestVersionFromGitea()
@@ -157,19 +149,12 @@ class MainActivityPage : AppCompatActivity() {
         return when (item.itemId) {
             R.id.action_about -> {
 
-//                showAlertDialog(
-//                    this,
-//                    getString(R.string.about),
-//                    getString(R.string.about_info, GlobalStaticMembers.VersionName),
-//                    isDarkMode
-//                )
-
                 AlertDialogUtil(
                     this,
                     getString(R.string.about),
                     getString(R.string.about_info, GlobalStaticMembers.VersionName),
                     isDarkMode
-                    ).show()
+                ).show()
 
                 true
             }
@@ -193,40 +178,6 @@ class MainActivityPage : AppCompatActivity() {
 
 
     companion object {
-//        /**
-//         * 显示提示框
-//         *
-//         * @param context 上下文
-//         * @param title 标题
-//         * @param message 内容
-//         * @param isDark 是否暗色模式
-//         */
-//        fun showAlertDialog(context: Context, title: String, message: String, isDark: Boolean) {
-//            val builder = AlertDialog.Builder(context)
-//            val inflater = LayoutInflater.from(context)
-//            val dialogView: View = inflater.inflate(R.layout.custom_dialog, null)
-//            val dialog: LinearLayout = dialogView.findViewById(R.id.custom_alertdialog)
-//            val titleTextView: TextView = dialogView.findViewById(R.id.dialog_title)
-//            val messageTextView: TextView = dialogView.findViewById(R.id.dialog_message)
-//            val positiveButton: Button = dialogView.findViewById(R.id.dialog_positiveButton)
-//            var dialogBackground = R.drawable.info_border
-//            var okBackground = R.drawable.kb_ok
-//            titleTextView.text = title
-//            messageTextView.text = message
-//
-//            if (isDark) {
-//                dialogBackground = R.color.grey
-//                okBackground = R.color.grey
-//            }
-//            dialog.setBackgroundResource(dialogBackground)
-//            positiveButton.setBackgroundResource(okBackground)
-//            builder.setView(dialogView)
-//            val alertDialog = builder.create()
-//            positiveButton.setOnClickListener {
-//                alertDialog.dismiss()
-//            }
-//            alertDialog.show()
-//        }
     }
 
 

@@ -46,21 +46,6 @@ class KbFunction {
             verificationCode: String
         ): AuthStatus {
 
-//            val client = getHttpClient()
-
-//            val encodedData = URLEncoder.encode(
-//                Base64.encodeToString(
-//                    userNum.toByteArray(),
-//                    Base64.NO_WRAP
-//                ) + "%%%" + Base64.encodeToString(userPasswd.toByteArray(), Base64.NO_WRAP), "UTF-8"
-//            )
-
-//            val codeGroup = getScode(api)
-//            if (!codeGroup.isOk && codeGroup.client != null) {
-//                return AuthStatus(false, codeGroup.reason ?: "", null)
-//            }
-//            val client = codeGroup.client
-
             val encodedData = URLEncoder.encode(
                 encodeNumAndPasswd(
                     userNum,
@@ -408,8 +393,6 @@ class KbFunction {
             for (item in infoContentBody) {
                 val attr = item.select("iconpark-icon").attr("name") ?: ""
                 val info = item.select("div.qz-detailtext.qz-ellipse").text() ?: "N/A".trim()
-//                val pattern = Pattern.compile("zhuanye-(\\w+)")
-//                val matcher=pattern.matcher(attr)
                 when (attr) {
                     "shengyuandi" -> userInfo.sourceOfOrigin = info
                     "xueyuan" -> userInfo.college = info

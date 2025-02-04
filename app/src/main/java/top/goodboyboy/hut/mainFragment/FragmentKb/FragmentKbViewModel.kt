@@ -11,25 +11,16 @@ class FragmentKbViewModel(private val application: Application) : AndroidViewMod
 
     val kbHead =
         listOf("课表", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六", "星期日")
-//    var isFirst = true
-
-    //    val message=MutableLiveData<String>()
     var zhouciSelectedIndex = 0
     var zhouciSelected = String()
     var zhouci = mutableListOf<String>()
     var kbjcmsid = String()
     var xnxq01id = String()
 
-//    var userNum=String()
-//    var userPasswd=String()
-
-    init {
-
-//        initKbParam()
-
-//        initUserPasswd()
-    }
-
+    /**
+     * 初始化课表参数
+     *
+     */
     fun initKbParam() {
         val internalStorageDir = application.filesDir
         val fileName = "kbParam.txt"
@@ -57,22 +48,6 @@ class FragmentKbViewModel(private val application: Application) : AndroidViewMod
                 .show()
         }
     }
-
-//    fun initUserPasswd(){
-//        val internalStorageDir = application.filesDir
-//        val fileName = "data.txt"
-//        val file = File(internalStorageDir, fileName)
-//        val userInfo: String
-//        if (file.exists()) {
-//            userInfo=file.readText()
-//            userNum=userInfo.split(':')[0]
-//            userPasswd=userInfo.split(':')[1]
-//        }
-//        else
-//        {
-//            Toast.makeText(application,"未找到用户配置文件，建议重新登录！",Toast.LENGTH_LONG).show()
-//        }
-//    }
 }
 
 

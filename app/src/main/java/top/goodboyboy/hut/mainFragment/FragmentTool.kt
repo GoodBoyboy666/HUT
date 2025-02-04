@@ -27,52 +27,15 @@ class FragmentTool : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val setting= SettingsUtil(requireContext())
-
-//        binding.test.setOnClickListener{
-//            val intent=Intent(requireContext(),BrowseActivity::class.java)
-//            intent.putExtra("url","https://www.goodboyboy.top")
-//            intent.putExtra("jwt","")
-//            startActivity(intent)
-//        }
-
-
-//        val internalStorageDir = requireContext().filesDir
+        val setting = SettingsUtil(requireContext())
         val fragmentManager = requireActivity().supportFragmentManager
-//
-//        val fileName = "settings.txt"
-//        val file = File(internalStorageDir, fileName)
-//
-//        var findAccessToken=false
-//        if (file.exists()) {
-//            val fileText = file.readText()
-//            if (fileText != "") {
-//                val settings =
-//                    Gson().fromJson(file.readText(), SettingsClass::class.java)
-//                if(settings.accessToken.isNotBlank()){
-//                    findAccessToken=true
-//                    fragmentManager.beginTransaction()
-//                        .setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
-//                        .replace(R.id.fragmentContainer,FragmentHutServiceCenter())
-//                        .commit()
-//                }
-//            }
-//        }
-//
-//        if(!findAccessToken) {
-//            fragmentManager.beginTransaction()
-//                .setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
-//                .replace(R.id.fragmentContainer, FragmentLoginHutApp())
-//                .commit()
-//
-//        }
 
-        if(setting.globalSettings.accessToken.isNotBlank()){
+        if (setting.globalSettings.accessToken.isNotBlank()) {
             fragmentManager.beginTransaction()
                 .setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
-                .replace(R.id.fragmentContainer,FragmentHutServiceCenter())
+                .replace(R.id.fragmentContainer, FragmentHutServiceCenter())
                 .commit()
-        }else{
+        } else {
             fragmentManager.beginTransaction()
                 .setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
                 .replace(R.id.fragmentContainer, FragmentLoginHutApp())

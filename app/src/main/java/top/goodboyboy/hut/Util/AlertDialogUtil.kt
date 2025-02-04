@@ -9,6 +9,17 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import top.goodboyboy.hut.R
 
+/**
+ * 提示框Util
+ *
+ * @property context 上下文
+ * @property title 标题
+ * @property message 内容
+ * @property isDark 暗色模式
+ * @property event 确定按钮事件
+ * @property type 提示框类型
+ * @property onClickListener 事件内容
+ */
 class AlertDialogUtil(
     val context: Context,
     val title: String,
@@ -19,6 +30,10 @@ class AlertDialogUtil(
     val onClickListener: (View) -> Unit = {}
 ) {
 
+    /**
+     * 展示提示框
+     *
+     */
     fun show() {
         val builder = AlertDialog.Builder(context)
         val inflater = LayoutInflater.from(context)
@@ -27,7 +42,7 @@ class AlertDialogUtil(
         val titleTextView: TextView = dialogView.findViewById(R.id.dialog_title)
         val messageTextView: TextView = dialogView.findViewById(R.id.dialog_message)
         val positiveButton: Button = dialogView.findViewById(R.id.dialog_positiveButton)
-        val customButton:Button=dialogView.findViewById(R.id.dialog_customButton)
+        val customButton: Button = dialogView.findViewById(R.id.dialog_customButton)
         var dialogBackground = R.drawable.info_border
         var okBackground = R.drawable.kb_ok
         titleTextView.text = title
@@ -49,12 +64,12 @@ class AlertDialogUtil(
                 alertDialog.dismiss()
             }
         }
-        if(type==AlertDialogType.DEFAULT){
-            customButton.visibility=View.GONE
-        }else if(type==AlertDialogType.NEW_VERSION){
+        if (type == AlertDialogType.DEFAULT) {
+            customButton.visibility = View.GONE
+        } else if (type == AlertDialogType.NEW_VERSION) {
             customButton.setOnClickListener {
-                val setting=SettingsUtil(context)
-                setting.globalSettings.noMoreReminders=true
+                val setting = SettingsUtil(context)
+                setting.globalSettings.noMoreReminders = true
                 setting.save()
                 alertDialog.dismiss()
             }
@@ -62,11 +77,19 @@ class AlertDialogUtil(
         alertDialog.show()
     }
 
+    /**
+     * 提示框事件
+     *
+     */
     enum class AlertDialogEvent {
         DEFAULT,
         CUSTOM
     }
 
+    /**
+     * /提示框类型
+     *
+     */
     enum class AlertDialogType {
         DEFAULT,
         NEW_VERSION

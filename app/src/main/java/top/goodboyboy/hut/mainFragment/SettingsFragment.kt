@@ -5,7 +5,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.webkit.WebStorage
-import android.webkit.WebView
 import android.widget.Toast
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
@@ -29,7 +28,7 @@ import java.io.File
 
 class SettingsFragment : PreferenceFragmentCompat() {
     private var cleanCacheJob: Job? = null
-    private var countCacheSize:Job?=null
+    private var countCacheSize: Job? = null
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.root_preferences, rootKey)
 
@@ -53,8 +52,8 @@ class SettingsFragment : PreferenceFragmentCompat() {
         }
 
         findPreference<Preference>("check_new")?.setOnPreferenceClickListener {
-            if(setting.globalSettings.noMoreReminders){
-                setting.globalSettings.noMoreReminders=false
+            if (setting.globalSettings.noMoreReminders) {
+                setting.globalSettings.noMoreReminders = false
                 setting.save()
             }
             CoroutineScope(Dispatchers.IO).launch {
@@ -117,18 +116,21 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
 
         bioSwitch?.setOnPreferenceChangeListener { _, newValue ->
-            val bioStatus=BioUtil().checkBiometricSupport(requireContext())
-            if(bioStatus.status) {
+            val bioStatus = BioUtil().checkBiometricSupport(requireContext())
+            if (bioStatus.status) {
                 val isEnabled = newValue as Boolean
                 if (isEnabled) {
-                    val biometricPrompt = BiometricPrompt(this, executor, object : BiometricPrompt.AuthenticationCallback() {
-                        override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
-                            super.onAuthenticationSucceeded(result)
-                            setting.globalSettings.enableBio = true
-                            setting.save()
-                            bioSwitch.isChecked = setting.globalSettings.enableBio
-                        }
-                    })
+                    val biometricPrompt = BiometricPrompt(
+                        this,
+                        executor,
+                        object : BiometricPrompt.AuthenticationCallback() {
+                            override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+                                super.onAuthenticationSucceeded(result)
+                                setting.globalSettings.enableBio = true
+                                setting.save()
+                                bioSwitch.isChecked = setting.globalSettings.enableBio
+                            }
+                        })
 
                     BioUtil().startAuthentication(biometricPrompt)
                     false
@@ -137,8 +139,9 @@ class SettingsFragment : PreferenceFragmentCompat() {
                     setting.save()
                     true
                 }
-            }else{
-                Toast.makeText(requireContext(),bioStatus.reason?:"未知错误",Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(requireContext(), bioStatus.reason ?: "未知错误", Toast.LENGTH_SHORT)
+                    .show()
                 false
             }
         }
@@ -149,9 +152,9 @@ class SettingsFragment : PreferenceFragmentCompat() {
             true
         }
 
-        val cleanWebViewCache=findPreference<Preference>("clean_webView_cache")
+        val cleanWebViewCache = findPreference<Preference>("clean_webView_cache")
         cleanWebViewCache?.setOnPreferenceClickListener {
-            cleanCacheJob=CoroutineScope(Dispatchers.IO).launch {
+            cleanCacheJob = CoroutineScope(Dispatchers.IO).launch {
                 WebStorage.getInstance().deleteAllData()
                 context?.deleteDatabase("webview.db")
                 context?.deleteDatabase("webviewCache.db")
@@ -162,8 +165,8 @@ class SettingsFragment : PreferenceFragmentCompat() {
                     }
                 }
                 val webViewCacheDir = context?.getDir("webview", Context.MODE_PRIVATE)
-                if (webViewCacheDir!=null){
-                    if (webViewCacheDir.exists()){
+                if (webViewCacheDir != null) {
+                    if (webViewCacheDir.exists()) {
                         webViewCacheDir.deleteRecursively()
                     }
                 }
@@ -171,29 +174,35 @@ class SettingsFragment : PreferenceFragmentCompat() {
                 if (codeCacheDir.exists()) {
                     codeCacheDir.deleteRecursively()
                 }
-                withContext(Dispatchers.Main){
-                    cleanWebViewCache.summary="清理完成"
+                withContext(Dispatchers.Main) {
+                    cleanWebViewCache.summary = "清理完成"
                 }
             }
             true
         }
-        countCacheSize= CoroutineScope(Dispatchers.IO).launch {
+        countCacheSize = CoroutineScope(Dispatchers.IO).launch {
             val cacheDir = context?.cacheDir
             val webViewCacheDir = context?.getDir("webview", Context.MODE_PRIVATE)
-            var totalCacheSize=0L
-            if(cacheDir!=null) {
+            var totalCacheSize = 0L
+            if (cacheDir != null) {
                 totalCacheSize +=
                     calculateDirectorySize(cacheDir)
             }
-            if(webViewCacheDir!=null){
-                totalCacheSize +=calculateDirectorySize(webViewCacheDir)
+            if (webViewCacheDir != null) {
+                totalCacheSize += calculateDirectorySize(webViewCacheDir)
             }
-            withContext(Dispatchers.Main){
-                cleanWebViewCache?.summary="缓存占用: ${formatSize(totalCacheSize)}"
+            withContext(Dispatchers.Main) {
+                cleanWebViewCache?.summary = "缓存占用: ${formatSize(totalCacheSize)}"
             }
         }
     }
 
+    /**
+     * 计算文件夹大小
+     *
+     * @param directory 文件夹路径
+     * @return 文件夹大小
+     */
     fun calculateDirectorySize(directory: File): Long {
         if (!directory.exists()) return 0
 
@@ -211,6 +220,12 @@ class SettingsFragment : PreferenceFragmentCompat() {
         return size
     }
 
+    /**
+     * 格式化文件夹大小
+     *
+     * @param size 文件夹大小
+     * @return 格式化后的文件夹大小字符串
+     */
     fun formatSize(size: Long): String {
         return when {
             size < 1024 -> "$size B"

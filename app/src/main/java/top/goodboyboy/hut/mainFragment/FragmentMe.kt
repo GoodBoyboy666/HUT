@@ -1,36 +1,21 @@
 package top.goodboyboy.hut.mainFragment
 
 import android.annotation.SuppressLint
-import android.app.AlertDialog
-import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.LinearLayout
-import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat.finishAffinity
 import androidx.fragment.app.Fragment
 import com.google.gson.Gson
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import top.goodboyboy.hut.CheckUpdate
-import top.goodboyboy.hut.GlobalStaticMembers
 import top.goodboyboy.hut.KbFunction
 import top.goodboyboy.hut.Activity.LoginActivity
-import top.goodboyboy.hut.Activity.MainActivityPage
 import top.goodboyboy.hut.R
 import top.goodboyboy.hut.Util.SettingsUtil
 import top.goodboyboy.hut.UserInfoClass
-import top.goodboyboy.hut.Util.AlertDialogUtil
 import top.goodboyboy.hut.databinding.FragmentMeBinding
-import top.goodboyboy.hut.mainFragment.FragmentHutServiceCenter.FragmentHutServiceCenter
 import java.io.File
 
 class FragmentMe : Fragment() {
@@ -82,56 +67,10 @@ class FragmentMe : Fragment() {
             setting.globalSettings.isLogin = false
             setting.save()
             startActivity(intent)
-
-//            val fileName = "settings.txt"
-//            val file = File(internalStorageDir, fileName)
-//
-//            if (file.exists()) {
-//                val fileText = file.readText()
-//                if (fileText != "") {
-//                    val settings = Gson().fromJson(file.readText(), SettingsClass::class.java)
-//                    settings.reCache = true
-//                    val writer = FileWriter(file, false)
-//                    writer.write(Gson().toJson(settings))
-//                    writer.close()
-//                    startActivity(intent)
-//                }
-//            } else {
-//                Toast.makeText(
-//                    requireContext(),
-//                    "配置文件不存在，请使用注销功能！",
-//                    Toast.LENGTH_LONG
-//                ).show()
-//            }
         }
 
 
         binding.meButtonLogoutHutApp.setOnClickListener {
-//            val fileName = "settings.txt"
-//            val file = File(internalStorageDir, fileName)
-//
-//            if (file.exists()) {
-//                val fileText = file.readText()
-//                if (fileText != "") {
-//                    val settings = Gson().fromJson(file.readText(), SettingsClass::class.java)
-//                    settings.accessToken = ""
-//                    val writer = FileWriter(file, false)
-//                    writer.write(Gson().toJson(settings))
-//                    writer.close()
-//                    Toast.makeText(
-//                        requireContext(),
-//                        "清除完成！",
-//                        Toast.LENGTH_LONG
-//                    ).show()
-//                }
-//            } else {
-//                Toast.makeText(
-//                    requireContext(),
-//                    "配置文件不存在，请使用注销功能！",
-//                    Toast.LENGTH_LONG
-//                ).show()
-//            }
-
             setting.globalSettings.accessToken = ""
             setting.save()
             Toast.makeText(
@@ -173,38 +112,4 @@ class FragmentMe : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
-//    fun showNewVersionAlertDialog(
-//        context: Context,
-//        title: String,
-//        message: String,
-//        url: String,
-//        isDark: Boolean
-//    ) {
-//        val builder = AlertDialog.Builder(context)
-//        val inflater = LayoutInflater.from(context)
-//        val dialogView: View = inflater.inflate(R.layout.custom_dialog, null)
-//        val dialog: LinearLayout = dialogView.findViewById(R.id.custom_alertdialog)
-//        val titleTextView: TextView = dialogView.findViewById(R.id.dialog_title)
-//        val messageTextView: TextView = dialogView.findViewById(R.id.dialog_message)
-//        val positiveButton: Button = dialogView.findViewById(R.id.dialog_positiveButton)
-//        var dialogBackground = R.drawable.info_border
-//        var okBackground = R.drawable.kb_ok
-//        titleTextView.text = title
-//        messageTextView.text = message
-//
-//        if (isDark) {
-//            dialogBackground = R.color.grey
-//            okBackground = R.color.grey
-//        }
-//        dialog.setBackgroundResource(dialogBackground)
-//        positiveButton.setBackgroundResource(okBackground)
-//        builder.setView(dialogView)
-//        val alertDialog = builder.create()
-//        positiveButton.setOnClickListener {
-//            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-//            startActivity(intent)
-//        }
-//        alertDialog.show()
-//    }
 }
