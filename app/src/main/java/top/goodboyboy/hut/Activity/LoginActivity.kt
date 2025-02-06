@@ -22,7 +22,6 @@ import top.goodboyboy.hut.Scode
 import top.goodboyboy.hut.Util.AlertDialogUtil
 import top.goodboyboy.hut.Util.SettingsUtil
 import top.goodboyboy.hut.databinding.ActivityLoginBinding
-import top.goodboyboy.hut.others.UncaughtException
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
@@ -35,9 +34,7 @@ class LoginActivity : AppCompatActivity() {
         setContentView(view)
 
 
-        val isDarkMode=KbFunction.checkDarkMode(this)
-
-
+        val isDarkMode = KbFunction.checkDarkMode(this)
 
 
         //初始化设置
@@ -47,77 +44,25 @@ class LoginActivity : AppCompatActivity() {
 
         binding.progressRelativeLayout.visibility = View.GONE
 
-//        var isJump=false
-//        if (file.exists()) {
-//            val fileText = file.readText()
-//            if (fileText != "") {
-//                val settings = Gson().fromJson(file.readText(), SettingsClass::class.java)
-//                binding.userNum.setText(settings.userNum)
-//                binding.userPasswd.setText(settings.userPasswd)
-//                GlobalStaticMembers.apiSelected = settings.selectedAPI
-//
-//                //检测是否为更新缓存
-//                if (!settings.reCache) {
-//                    val intent = Intent(this, MainActivityPage::class.java)
-//                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-//                    startActivity(intent)
-//                    isJump=true
-//                }
-//            }
-//        }
         //检测是否已经登录
         if (setting.globalSettings.isLogin) {
-            if(setting.globalSettings.enableBio){
-                val intent=Intent(this,BioActivity::class.java)
-                intent.flags=Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            if (setting.globalSettings.enableBio) {
+                val intent = Intent(this, BioActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(intent)
-            }else {
+            } else {
                 val intent = Intent(this, MainActivityPage::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(intent)
             }
-        }
-
-
-//            CoroutineScope(Dispatchers.Main).launch {
-//                val auth: AuthStatus
-//                withContext(Dispatchers.IO) {
-//                    auth = checkLogin()
-//                }
-//                if (auth.status) {
-//                    GlobalStaticMembers.client = auth.client
-//                    binding.progressRelativeLayout.visibility = View.GONE
-//                    val kbDir = internalStorageDir.path + "/kbs/"
-//                    KbFunction.clearDirectory(File(kbDir))
-//                    val intent = Intent(this@LoginActivity, CacheActivity::class.java)
-//                    startActivity(intent)
-//                } else {
-//                    binding.progressRelativeLayout.visibility = View.GONE
-//                    Toast.makeText(this@LoginActivity, auth.reason, Toast.LENGTH_LONG).show()
-//                }
-//            }
-
-
-//            val fileName = "settings.txt"
-//            val file = File(internalStorageDir, fileName)
-//            val userInfo: String
-//            if (file.exists()) {
-//                userInfo = file.readText()
-//                if (userInfo != "") {
-//                    val intent = Intent(this, MainActivityPage::class.java)
-//                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-//                    startActivity(intent)
-//                }
-//            }
-
-        else {
+        } else {
             //检测是否存在账号信息并读取
             binding.userNum.setText(setting.globalSettings.userNum)
             binding.userPasswd.setText(setting.globalSettings.userPasswd)
             GlobalStaticMembers.apiSelected = setting.globalSettings.selectedAPI
 
             //检测更新
-            if(!setting.globalSettings.noMoreReminders) {
+            if (!setting.globalSettings.noMoreReminders) {
                 CoroutineScope(Dispatchers.IO).launch {
                     try {
                         val status = CheckUpdate.getLatestVersionFromGitea()
@@ -190,7 +135,7 @@ class LoginActivity : AppCompatActivity() {
                             withContext(Dispatchers.Main) {
                                 binding.captchaImage.setImageBitmap(captcha.image)
                             }
-                        }else{
+                        } else {
                             scode()
                         }
                     } catch (e: Exception) {
@@ -209,9 +154,7 @@ class LoginActivity : AppCompatActivity() {
             binding.buttonLogin.setOnClickListener {
                 binding.progressRelativeLayout.visibility = View.VISIBLE
 
-//            KbFunction.clearDirectory(internalStorageDir)
-
-                if (::codeList.isInitialized&&!codeList.scode.isNullOrBlank() && !codeList.sxh.isNullOrBlank() && codeList.client != null) {
+                if (::codeList.isInitialized && !codeList.scode.isNullOrBlank() && !codeList.sxh.isNullOrBlank() && codeList.client != null) {
 
                     CoroutineScope(Dispatchers.Main).launch {
                         val auth: AuthStatus
@@ -227,19 +170,6 @@ class LoginActivity : AppCompatActivity() {
                             //将账号密码与设置写入文件
                             GlobalStaticMembers.client = codeList.client
                             binding.progressRelativeLayout.visibility = View.GONE
-
-//                            val settingsClass = SettingsClass(
-//                                binding.userNum.text.toString(),
-//                                binding.userPasswd.text.toString(),
-//                                selectedAPI = binding.chooseAPI.selectedItemPosition,
-//                                reCache = false
-//                            )
-//
-//                            val settingsName = "settings.txt"
-//                            val settingsFile = File(internalStorageDir, settingsName)
-//                            val writer = FileWriter(settingsFile, false)
-//                            writer.write(Gson().toJson(settingsClass))
-//                            writer.close()
 
                             setting.globalSettings.userNum = binding.userNum.text.toString()
                             setting.globalSettings.userPasswd = binding.userPasswd.text.toString()
@@ -257,7 +187,7 @@ class LoginActivity : AppCompatActivity() {
                                 .show()
                         }
                     }
-                }else{
+                } else {
                     binding.progressRelativeLayout.visibility = View.GONE
                     Toast.makeText(this@LoginActivity, "未获取到scode！", Toast.LENGTH_LONG)
                         .show()
@@ -266,6 +196,10 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * 获取scode
+     *
+     */
     private fun scode() {
         //获取登录所需参数
         CoroutineScope(Dispatchers.IO).launch {
@@ -282,7 +216,11 @@ class LoginActivity : AppCompatActivity() {
                 }
             } else {
                 withContext(Dispatchers.Main) {
-                    Toast.makeText(this@LoginActivity, codeList.reason?:"获取scode失败", Toast.LENGTH_LONG)
+                    Toast.makeText(
+                        this@LoginActivity,
+                        codeList.reason ?: "获取scode失败",
+                        Toast.LENGTH_LONG
+                    )
                         .show()
                 }
             }
@@ -293,7 +231,11 @@ class LoginActivity : AppCompatActivity() {
     /**
      * 登录
      *
-     * @return 登录状态对象
+     * @param scode scode参数
+     * @param sxh sxh参数
+     * @param verificationCode 验证码
+     * @param client 参与验证的OkHttpClient对象
+     * @return AuthStatus对象
      */
     private fun checkLogin(
         scode: String,
@@ -301,7 +243,6 @@ class LoginActivity : AppCompatActivity() {
         verificationCode: String,
         client: OkHttpClient
     ): AuthStatus {
-//        return MainFunction(MainFunction.getHttpClient(),this).authentication(binding.userNum.text.toString(),binding.userPasswd.text.toString())
         return KbFunction.authentication(
             binding.userNum.text.toString(),
             binding.userPasswd.text.toString(),

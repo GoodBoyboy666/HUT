@@ -38,7 +38,7 @@ class FragmentLoginHutApp : Fragment() {
         val isDarkMode = KbFunction.checkDarkMode(requireContext())
         val internalStorageDir = requireContext().filesDir
         val fragmentManager = requireActivity().supportFragmentManager
-        val setting= SettingsUtil(requireContext())
+        val setting = SettingsUtil(requireContext())
 
 
         Toast.makeText(requireContext(), "该账号密码为智慧工大账户账号密码！", Toast.LENGTH_SHORT)
@@ -71,40 +71,8 @@ class FragmentLoginHutApp : Fragment() {
                     clientId
                 )
                 if (accessToken.isOk && accessToken.accessToken != null) {
-//                    val fileName = "settings.txt"
-//                    val file = File(internalStorageDir, fileName)
-//
-//                    if (file.exists()) {
-//                        val fileText = file.readText()
-//                        if (fileText != "") {
-//                            val settings =
-//                                Gson().fromJson(file.readText(), SettingsClass::class.java)
-//                            settings.accessToken = accessToken.accessToken
-//
-//                            val writer = FileWriter(file, false)
-//                            writer.write(Gson().toJson(settings))
-//                            writer.close()
-//
-//                            withContext(Dispatchers.Main) {
-//                                Toast.makeText(requireContext(), "登录成功", Toast.LENGTH_SHORT)
-//                                    .show()
-//                                fragmentManager.beginTransaction()
-//                                    .setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
-//                                    .replace(R.id.fragmentContainer, FragmentHutServiceCenter())
-//                                    .commit()
-//                            }
-//                        }
-//                    } else {
-//                        withContext(Dispatchers.Main) {
-//                            Toast.makeText(
-//                                requireContext(),
-//                                "获取配置文件异常，建议退出登录后重新登录！",
-//                                Toast.LENGTH_LONG
-//                            ).show()
-//                        }
-//                    }
 
-                    setting.globalSettings.accessToken=accessToken.accessToken
+                    setting.globalSettings.accessToken = accessToken.accessToken
                     setting.save()
 
                     withContext(Dispatchers.Main) {

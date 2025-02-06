@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
 import top.goodboyboy.hut.GridAdapterItems
-import top.goodboyboy.hut.Activity.MainActivityPage
 import top.goodboyboy.hut.R
 import top.goodboyboy.hut.Util.AlertDialogUtil
 
@@ -64,12 +63,6 @@ class KbAdapter(
 
         view.setOnClickListener {
             val selectedItem = data.kbInfo?.get(position)
-//            MainActivityPage.showAlertDialog(
-//                context,
-//                data.kbTitle?.get(position) ?: "N/A",
-//                "$selectedItem",
-//                dark
-//            )
 
             AlertDialogUtil(
                 context,
@@ -78,15 +71,6 @@ class KbAdapter(
                 dark
             ).show()
         }
-
-//        val dividerColor = ContextCompat.getColor(context, R.color.black)
-//        val dividerWidth = 1
-//
-//        // 在网格项的背景中绘制网格线
-//        val backgroundDrawable = GradientDrawable()
-////        backgroundDrawable.setColor(Color.WHITE)
-//        backgroundDrawable.setStroke(dividerWidth, dividerColor)
-//        view.background = backgroundDrawable
 
         return view
     }

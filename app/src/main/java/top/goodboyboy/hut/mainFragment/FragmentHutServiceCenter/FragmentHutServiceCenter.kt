@@ -154,6 +154,14 @@ class FragmentHutServiceCenter : Fragment() {
 
     }
 
+    /**
+     * 从字符串中显示服务列表
+     *
+     * @param stringJson json格式的字符串
+     * @param isDark 暗色模式
+     * @param jwt jwt
+     * @return ServiceItem数组
+     */
     private fun showServiceListFromString(
         stringJson: String,
         isDark: Boolean,
@@ -178,6 +186,13 @@ class FragmentHutServiceCenter : Fragment() {
         return serviceItems
     }
 
+    /**
+     * 从ServiceItem数组中显示服务列表
+     *
+     * @param serviceList ServiceItem数组
+     * @param isDark 暗色模式
+     * @param jwt jwt
+     */
     private fun showServiceListFromObject(
         serviceList: MutableList<ServiceItem>,
         isDark: Boolean,
@@ -187,6 +202,12 @@ class FragmentHutServiceCenter : Fragment() {
             ServiceListAdapter(requireContext(), serviceList, isDark, jwt)
     }
 
+    /**
+     * 显示常用服务列表
+     *
+     * @param isDark 暗色模式
+     * @param jwt jwt
+     */
     private fun showFrequentServiceList(
         isDark: Boolean,
         jwt: String
@@ -209,7 +230,7 @@ class FragmentHutServiceCenter : Fragment() {
                 "用水服务",
                 "https://v8mobile.hut.edu.cn/zdRedirect/toSingleMenu?code=openWater",
                 "[{\"tokenType\":\"header\",\"tokenKey\":\"X-Id-Token\"},{\"tokenType\":\"url\",\"tokenKey\":\"token\"}]"
-                ),
+            ),
             ServiceItem(
                 "https://portal.hut.edu.cn/portal-minio/service/9_9__1685350006675.png",
                 "电费充值",
@@ -227,6 +248,11 @@ class FragmentHutServiceCenter : Fragment() {
             ServiceListAdapter(requireContext(), serviceList, isDark, jwt)
     }
 
+    /**
+     * 缓存服务列表
+     *
+     * @param serviceItems ServiceItem数组
+     */
     private fun cacheServiceList(serviceItems: MutableList<ServiceItem>) {
         val json = Gson().toJson(serviceItems)
         val fileName = "ServiceList.txt"
@@ -236,6 +262,11 @@ class FragmentHutServiceCenter : Fragment() {
         writer.close()
     }
 
+    /**
+     * 从文件中加载ServiceItem数组
+     *
+     * @return ServiceItem数组
+     */
     private fun getServiceListFromFile(): MutableList<ServiceItem>? {
         val fileName = "ServiceList.txt"
         val internalStorageDir = requireContext().filesDir

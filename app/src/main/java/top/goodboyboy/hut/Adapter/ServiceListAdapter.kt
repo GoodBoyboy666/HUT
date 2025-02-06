@@ -12,11 +12,12 @@ import com.bumptech.glide.Glide
 import top.goodboyboy.hut.Activity.BrowseActivity
 import top.goodboyboy.hut.R
 import top.goodboyboy.hut.ServiceItem
-import java.io.File
 
-class ServiceListAdapter(private val context: Context,
-                         private val data: List<ServiceItem>,
-                         private val dark: Boolean,private val jwt:String) :BaseAdapter(){
+class ServiceListAdapter(
+    private val context: Context,
+    private val data: List<ServiceItem>,
+    private val dark: Boolean, private val jwt: String
+) : BaseAdapter() {
     override fun getCount(): Int {
         return data.size
     }
@@ -34,7 +35,8 @@ class ServiceListAdapter(private val context: Context,
         val viewHolder: ViewHolder
 
         if (convertView == null) {
-            view = LayoutInflater.from(context).inflate(R.layout.service_list_item_layout, parent, false)
+            view = LayoutInflater.from(context)
+                .inflate(R.layout.service_list_item_layout, parent, false)
             viewHolder = ViewHolder(view)
             view.tag = viewHolder
         } else {
@@ -52,15 +54,16 @@ class ServiceListAdapter(private val context: Context,
 
         view.setOnClickListener {
 
-            val intent= Intent(context, BrowseActivity::class.java)
-            intent.putExtra("url",item.serviceUrl)
-            intent.putExtra("jwt",jwt)
-            intent.putExtra("tokenAccept",item.tokenAccept)
+            val intent = Intent(context, BrowseActivity::class.java)
+            intent.putExtra("url", item.serviceUrl)
+            intent.putExtra("jwt", jwt)
+            intent.putExtra("tokenAccept", item.tokenAccept)
             context.startActivity(intent)
         }
 
         return view
     }
+
     private class ViewHolder(view: View) {
         val imageView: ImageView = view.findViewById(R.id.service_item_image)
         val textView: TextView = view.findViewById(R.id.service_item_text)

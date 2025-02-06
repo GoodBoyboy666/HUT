@@ -59,20 +59,6 @@ class KbHeaderAdapter(
             textView.setBackgroundResource(kbItemBackground3)
         }
 
-//        val layoutParams = textView.layoutParams
-//        layoutParams.height = 200
-//        textView.layoutParams = layoutParams
-
-
-//        val dividerColor = ContextCompat.getColor(context, R.color.black)
-//        val dividerWidth = 1
-//
-//        // 在网格项的背景中绘制网格线
-//        val backgroundDrawable = GradientDrawable()
-////        backgroundDrawable.setColor(Color.WHITE)
-//        backgroundDrawable.setStroke(dividerWidth, dividerColor)
-//        view.background = backgroundDrawable
-
         return view
     }
 }

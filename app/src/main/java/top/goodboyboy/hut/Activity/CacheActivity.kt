@@ -19,7 +19,6 @@ import top.goodboyboy.hut.KbParam
 import top.goodboyboy.hut.R
 import top.goodboyboy.hut.Util.Hash
 import top.goodboyboy.hut.databinding.ActivityCacheBinding
-import top.goodboyboy.hut.others.UncaughtException
 import java.io.File
 
 class CacheActivity : AppCompatActivity() {
@@ -112,7 +111,12 @@ class CacheActivity : AppCompatActivity() {
      * @param kbjcmsid kbjcmsid
      * @param xnxq01id xnxq01id
      */
-    private suspend fun storeKb(kb: KbItems, zhouciSelected: String, kbjcmsid: String, xnxq01id: String) {
+    private suspend fun storeKb(
+        kb: KbItems,
+        zhouciSelected: String,
+        kbjcmsid: String,
+        xnxq01id: String
+    ) {
 
         val zhouKb = mutableListOf<KbItem>()
         for (item in kb.kbitems!!) {
@@ -146,29 +150,6 @@ class CacheActivity : AppCompatActivity() {
             }
             finish()
         }
-
-//        for (zhou in kb) {
-//            //每周课程名称
-//            val everyZhouKbTitle = mutableListOf<String>()
-//            for (item in zhou.kbitems!!) {
-//                for (k in item) {
-//                    everyZhouKbTitle.add(k.title)
-//                }
-//            }
-//
-//            //每周课程详情
-//            val everyZhouKbInfo = mutableListOf<String>()
-//            for (item in zhou.kbitems!!) {
-//                for (k in item) {
-//                    everyZhouKbInfo.add(k.infos)
-//                }
-//            }
-//
-//            val kbTitleJson = Gson().toJson(everyZhouKbTitle)
-//            val kbInfoJson = Gson().toJson(everyZhouKbInfo)
-//
-//            file.writeText("${kbTitleJson}%%%${kbInfoJson}###")
-//        }
 
         val gson = Gson()
 

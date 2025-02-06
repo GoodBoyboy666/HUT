@@ -8,7 +8,7 @@ data class SettingsClass(
     var accessToken: String = "",
     var isLogin: Boolean = false,
     var enableBio: Boolean = false,
-    var noMoreReminders:Boolean=false
+    var noMoreReminders: Boolean = false
 )
 
 data class UserInfoClass(

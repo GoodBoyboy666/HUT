@@ -14,38 +14,38 @@ class CheckUpdate {
          *
          * @return 包含版本信息的对象
          */
-        suspend fun getLatestVersionFromGitea():VersionStatus {
-                var response: Response
-                val client = OkHttpClient.Builder().build()
-                val request = Request.Builder()
-                    .get()
-                    .url("https://git.goodboyboy.top/api/v1/repos/goodboyboy/HUT/releases/latest")
-                    .build()
-                withContext(Dispatchers.IO) {
-                    response = client.newCall(request).execute()
-                }
-                if (response.isSuccessful) {
-                    val responseText = response.body?.string()
-                    val jsonElement = JsonParser.parseString(responseText)
-                    if (jsonElement.isJsonObject) {
-                        val jsonObj = jsonElement.asJsonObject
-                        val newVersion =
-                            checkNum(jsonObj.get("name").asString, GlobalStaticMembers.VersionName)
-                        if (newVersion) {
-                            val verName = jsonObj.get("name").asString
-                            val verBody = jsonObj.get("body").asString.replace("\r\n", "\n")
-                            val verUrl = jsonObj.get("html_url").asString
-                            return VersionStatus(true, VersionInfo(verName, verBody, verUrl), "")
-                        } else {
-                            return( VersionStatus(false, null, "已是最新版本！"))
-                        }
+        suspend fun getLatestVersionFromGitea(): VersionStatus {
+            var response: Response
+            val client = OkHttpClient.Builder().build()
+            val request = Request.Builder()
+                .get()
+                .url("https://git.goodboyboy.top/api/v1/repos/goodboyboy/HUT/releases/latest")
+                .build()
+            withContext(Dispatchers.IO) {
+                response = client.newCall(request).execute()
+            }
+            if (response.isSuccessful) {
+                val responseText = response.body?.string()
+                val jsonElement = JsonParser.parseString(responseText)
+                if (jsonElement.isJsonObject) {
+                    val jsonObj = jsonElement.asJsonObject
+                    val newVersion =
+                        checkNum(jsonObj.get("name").asString, GlobalStaticMembers.VersionName)
+                    if (newVersion) {
+                        val verName = jsonObj.get("name").asString
+                        val verBody = jsonObj.get("body").asString.replace("\r\n", "\n")
+                        val verUrl = jsonObj.get("html_url").asString
+                        return VersionStatus(true, VersionInfo(verName, verBody, verUrl), "")
                     } else {
-                        return( VersionStatus(false, null, "解析Json失败！"))
+                        return (VersionStatus(false, null, "已是最新版本！"))
                     }
                 } else {
-                    return( VersionStatus(false, null, "获取更新信息失败！"))
+                    return (VersionStatus(false, null, "解析Json失败！"))
                 }
+            } else {
+                return (VersionStatus(false, null, "获取更新信息失败！"))
             }
+        }
 
 
         fun getLatestVersionFromGithub() {

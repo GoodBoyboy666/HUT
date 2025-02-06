@@ -16,6 +16,18 @@ import kotlin.random.Random
 
 class HutApiFunction {
     companion object {
+        /**
+         * 获取AccessToken
+         *
+         * @param client OkHttpClient对象
+         * @param userName 用户名
+         * @param password 密码
+         * @param appId APPID
+         * @param deviceId deviceId
+         * @param osType osType
+         * @param clientId clientId
+         * @return AccessToken对象
+         */
         fun getAccessToken(
             client: OkHttpClient,
             userName: String,
@@ -57,6 +69,12 @@ class HutApiFunction {
                 .joinToString("")
         }
 
+        /**
+         * 获取服务列表
+         *
+         * @param accessToken accessToken
+         * @return ServiceList对象
+         */
         fun getServiceList(accessToken: String): ServiceList {
 
 //            ///only for test
@@ -122,6 +140,12 @@ class HutApiFunction {
             return ServiceList(false, null, "请求失败！")
         }
 
+        /**
+         * 解析Token类型
+         *
+         * @param typeJson typeJson字符串
+         * @return TokenTypeName对象
+         */
         fun parseTokenType(typeJson: String): TokenTypeName {
             var headerTokenKeyName = ""
             var urlTokenKeyName = ""
@@ -150,18 +174,40 @@ class HutApiFunction {
     }
 }
 
+/**
+ * AccessToken对象
+ *
+ * @property isOk 是否成功
+ * @property accessToken accessToken
+ * @property errorMessage 错误信息
+ */
 class AccessToken(
     val isOk: Boolean,
     val accessToken: String?,
     val errorMessage: String?
 )
 
+/**
+ * ServiceList对象
+ *
+ * @property isOk 是否成功
+ * @property serviceList 服务列表json
+ * @property errorMessage 错误信息
+ */
 class ServiceList(
     val isOk: Boolean,
     val serviceList: String?,
     val errorMessage: String?
 )
 
+/**
+ * 单个ServiceItem
+ *
+ * @property imageUrl 图标URL
+ * @property text 服务名称
+ * @property serviceUrl 服务URL
+ * @property tokenAccept Token名称json
+ */
 class ServiceItem(
     val imageUrl: String,
     val text: String,
@@ -169,6 +215,12 @@ class ServiceItem(
     val tokenAccept: String
 )
 
+/**
+ * Token名称对象
+ *
+ * @property headerTokenKeyName header中的Token名称
+ * @property urlTokenKeyName url中的Token名称
+ */
 class TokenTypeName(
     val headerTokenKeyName: String,
     val urlTokenKeyName: String
