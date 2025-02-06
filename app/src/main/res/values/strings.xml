@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">HUT课表</string>
+    <string name="app_name">HUT课表助手</string>
     <string name="get_kb_button_name">获取课表</string>
     <string name="user_hint">请输入学号</string>
     <string name="passwd_hint">请输入密码</string>

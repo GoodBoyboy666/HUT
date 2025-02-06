@@ -9,7 +9,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        app:title="HUT课表"
+        app:title="HUT课表助手"
         android:background="?attr/colorPrimaryContainer"
         app:popupTheme="@style/ThemeOverlay.AppCompat.DayNight" />
 

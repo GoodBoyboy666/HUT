@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Hut class schedule</string>
+    <string name="app_name">HUT class schedule helper</string>
     <string name="get_kb_button_name">Get the class schedule</string>
     <string name="user_hint">Please enter student number</string>
     <string name="passwd_hint">Please enter password</string>
