@@ -111,7 +111,9 @@ class FragmentHutServiceCenter : Fragment() {
                             .show()
                     }
                 }
-                binding.progressRelativeLayout.visibility = View.GONE
+                withContext(Dispatchers.Main) {
+                    binding.progressRelativeLayout.visibility = View.GONE
+                }
             }
         }
 
