@@ -13,6 +13,8 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import top.goodboyboy.hut.HutApiFunction
+import top.goodboyboy.hut.KbFunction
+import top.goodboyboy.hut.R
 import top.goodboyboy.hut.databinding.ActivityBrowseBinding
 
 class BrowseActivity : AppCompatActivity() {
@@ -26,6 +28,10 @@ class BrowseActivity : AppCompatActivity() {
         var url = intent.getStringExtra("url") ?: ""
         val jwt = intent.getStringExtra("jwt")
         val tokenAccept = intent.getStringExtra("tokenAccept") ?: ""
+
+        if (KbFunction.checkDarkMode(this)) {
+            binding.statusBar.setBackgroundResource(R.color.grey)
+        }
 
         val tokenTypeName = HutApiFunction.parseTokenType(tokenAccept)
 

@@ -9,6 +9,7 @@
     android:background="#F4BB6E"
     android:orientation="vertical">
     <LinearLayout
+        android:id="@+id/status_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <ImageButton
@@ -18,7 +19,8 @@
             android:src="@drawable/icon_back"
             android:scaleType="centerInside"
             android:background="@android:color/transparent"
-            android:contentDescription="@string/backbutton" />
+            android:contentDescription="@string/backbutton"
+            app:tint="@color/icon_color" />
         <ImageButton
             android:id="@+id/closeImageButton"
             android:layout_width="50sp"
@@ -26,7 +28,8 @@
             android:src="@drawable/icon_close"
             android:scaleType="centerInside"
             android:background="@android:color/transparent"
-            android:contentDescription="@string/close_button" />
+            android:contentDescription="@string/close_button"
+            app:tint="@color/icon_color" />
     </LinearLayout>
     <ProgressBar
         android:id="@+id/progressBar"
