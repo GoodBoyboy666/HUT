@@ -247,7 +247,7 @@ class KbFunction {
          */
         fun getAllKbParam(client: OkHttpClient, api: String): AllKbParam? {
             val request: Request = Request.Builder()
-                .url("${api}jsxsd/framework/xsMainV_new.htmlx?t1=1")
+                .url("${api}jsxsd/xskb/xskb_list.do?viweType=0")
                 .get()
                 .build()
             val response = client.newCall(request).execute()
@@ -307,23 +307,23 @@ class KbFunction {
         private fun getKbParam(responseBody: String): KbParam {
             val doc = Jsoup.parse(responseBody)
             val weeks: List<String> =
-                doc.select("select#week option").map { it.attr("value") }.toList()
+                doc.select("select#zc option").map { it.attr("value") }.toList()
 
 
             // 获取选中周次
-            val selected: Element? = doc.select("select#week option[selected]").first()
+            val selected: Element? = doc.select("select#zc option[selected]").first()
 
             //获取kbjcmsid
-            val kbjcmsid: Element? = doc.select("ul.layui-tab-title li").first()
+            val kbjcmsid: Element? = doc.select("select#kbjcmsid option[selected]").first()
 
             //获取xnxq01id
-            val xnxq01id: List<Element>? = doc.select("select[lay-filter='xnxq'] option")
+            val xnxq01id: Element? = doc.select("select#xnxq01id option[selected]").first()
 
             val kbParam = KbParam(
                 weeks,
-                kbjcmsid?.attr("data-value") ?: "",
-                xnxq01id?.firstOrNull()?.text() ?: "",
-                selected?.attr("value") ?: ""
+                kbjcmsid?.attr("value") ?: "",
+                xnxq01id?.text() ?: "",
+                selected?.attr("value") ?: "1"
             )
             return kbParam
         }

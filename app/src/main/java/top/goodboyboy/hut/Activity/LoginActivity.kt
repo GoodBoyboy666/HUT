@@ -124,30 +124,7 @@ class LoginActivity : AppCompatActivity() {
 
             //验证码刷新事件
             binding.captchaImage.setOnClickListener {
-                CoroutineScope(Dispatchers.IO).launch {
-                    try {
-                        if (codeList.client != null) {
-                            val captcha = KbFunction.getCaptcha(
-                                GlobalStaticMembers.jwxtAPI[GlobalStaticMembers.apiSelected],
-                                codeList.client!!
-                            )
-
-                            withContext(Dispatchers.Main) {
-                                binding.captchaImage.setImageBitmap(captcha.image)
-                            }
-                        } else {
-                            scode()
-                        }
-                    } catch (e: Exception) {
-                        withContext(Dispatchers.Main) {
-                            Toast.makeText(
-                                this@LoginActivity,
-                                e.message ?: "获取验证码失败！",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    }
-                }
+                flushCaptcha()
             }
 
             //登录按钮事件绑定
@@ -183,14 +160,54 @@ class LoginActivity : AppCompatActivity() {
                             startActivity(intent)
                         } else {
                             binding.progressRelativeLayout.visibility = View.GONE
-                            Toast.makeText(this@LoginActivity, auth.reason, Toast.LENGTH_LONG)
-                                .show()
+                            if (auth.reason.contains("用户名或密码不能为空") && binding.userNum.text.toString() != "" && binding.userPasswd.text.toString() != "") {
+                                Toast.makeText(
+                                    this@LoginActivity,
+                                    "scode可能已失效，请重启应用！",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            } else {
+                                Toast.makeText(this@LoginActivity, auth.reason, Toast.LENGTH_LONG)
+                                    .show()
+                            }
+                            scode()
                         }
                     }
                 } else {
                     binding.progressRelativeLayout.visibility = View.GONE
                     Toast.makeText(this@LoginActivity, "未获取到scode！", Toast.LENGTH_LONG)
                         .show()
+                }
+            }
+        }
+    }
+
+    /**
+     * 刷新验证码
+     *
+     */
+    private fun flushCaptcha() {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                if (codeList.client != null) {
+                    val captcha = KbFunction.getCaptcha(
+                        GlobalStaticMembers.jwxtAPI[GlobalStaticMembers.apiSelected],
+                        codeList.client!!
+                    )
+
+                    withContext(Dispatchers.Main) {
+                        binding.captchaImage.setImageBitmap(captcha.image)
+                    }
+                } else {
+                    scode()
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(
+                        this@LoginActivity,
+                        e.message ?: "获取验证码失败！",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         }
