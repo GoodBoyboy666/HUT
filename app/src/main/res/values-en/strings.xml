@@ -39,4 +39,5 @@
     <string name="all_tools_text">All tools</string>
     <string name="frequently_used_tools">Frequently used tools</string>
     <string name="no_more_reminders">No more reminders</string>
+    <string name="service_item_text">Service item</string>
 </resources>
