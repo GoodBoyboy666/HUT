@@ -172,14 +172,18 @@ class KbFunction {
                 password.toByteArray(),
                 Base64.NO_WRAP
             )
-            val code = "$account%%%$passwd"
+            val codeDogSequence = Base64.encodeToString(
+                " ".toByteArray(),
+                Base64.NO_WRAP
+            )
+            val code = "$account%%%$passwd%%%$codeDogSequence"
             var scode = scodeString
             val sxh = sxhString
             val encoded = StringBuilder()
 
             var i = 0
             while (i < code.length) {
-                if (i < 20) {
+                if (i < 55) {
                     val codeChar = code.substring(i, i + 1)
                     val sxhValue = sxh.substring(i, i + 1).toInt()
                     encoded.append(codeChar).append(scode.substring(0, sxhValue))
