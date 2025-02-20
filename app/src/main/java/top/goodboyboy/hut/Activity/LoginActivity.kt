@@ -167,10 +167,11 @@ class LoginActivity : AppCompatActivity() {
                         } else {
                             binding.progressRelativeLayout.visibility = View.GONE
                             if (auth.reason.contains("用户名或密码不能为空") && binding.userNum.text.toString() != "" && binding.userPasswd.text.toString() != "") {
-                                Toast.makeText(
+                                AlertDialogUtil(
                                     this@LoginActivity,
-                                    "scode可能已失效，请重启应用！",
-                                    Toast.LENGTH_SHORT
+                                    "错误",
+                                    "scode可能已失效，请重启应用以重新获取scode！\n若重启后仍出现该情况，可能教务系统接口已更改，请升级软件或联系软件开发人员！",
+                                    isDarkMode
                                 ).show()
                             } else {
                                 Toast.makeText(this@LoginActivity, auth.reason, Toast.LENGTH_LONG)
