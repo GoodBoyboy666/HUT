@@ -58,6 +58,7 @@ class AlertDialogUtil(
         dialog.setBackgroundResource(dialogBackground)
         positiveButton.setBackgroundResource(okBackground)
         customButton.setBackgroundResource(okBackground)
+        ignoreButton.setBackgroundResource(okBackground)
         builder.setView(dialogView)
         val alertDialog = builder.create()
         if (event == AlertDialogEvent.CUSTOM) {
