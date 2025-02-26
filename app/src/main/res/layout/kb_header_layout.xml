@@ -14,5 +14,6 @@
         android:layout_margin="5dp"
         android:letterSpacing="0.05"
         android:lineSpacingExtra="5dp"
+        android:gravity="center"
         android:text="@string/kb_item_string"/>
 </LinearLayout>

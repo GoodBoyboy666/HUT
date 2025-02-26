@@ -30,6 +30,8 @@ class AlertDialogUtil(
     val onClickListener: (View) -> Unit = {}
 ) {
 
+    var onClickIgnoreTheVersionButton: (() -> Unit)? = null
+
     /**
      * 展示提示框
      *
@@ -43,6 +45,7 @@ class AlertDialogUtil(
         val messageTextView: TextView = dialogView.findViewById(R.id.dialog_message)
         val positiveButton: Button = dialogView.findViewById(R.id.dialog_positiveButton)
         val customButton: Button = dialogView.findViewById(R.id.dialog_customButton)
+        val ignoreButton: Button = dialogView.findViewById(R.id.dialog_ignore_the_version)
         var dialogBackground = R.drawable.info_border
         var okBackground = R.drawable.kb_ok
         titleTextView.text = title
@@ -66,12 +69,19 @@ class AlertDialogUtil(
         }
         if (type == AlertDialogType.DEFAULT) {
             customButton.visibility = View.GONE
+            ignoreButton.visibility = View.GONE
         } else if (type == AlertDialogType.NEW_VERSION) {
             customButton.setOnClickListener {
                 val setting = SettingsUtil(context)
                 setting.globalSettings.noMoreReminders = true
                 setting.save()
                 alertDialog.dismiss()
+            }
+            if (onClickIgnoreTheVersionButton != null) {
+                ignoreButton.visibility = View.VISIBLE
+                ignoreButton.setOnClickListener {
+                    onClickIgnoreTheVersionButton?.invoke()
+                }
             }
         }
         alertDialog.show()

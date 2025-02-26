@@ -66,7 +66,6 @@ dependencies {
     implementation(libs.jsoup)
     implementation(libs.androidx.swiperefreshlayout)
     implementation(libs.google.gson)
-    implementation(libs.google.material.v150)
     implementation(libs.glide)
     annotationProcessor(libs.compiler)
     implementation(libs.androidx.biometric)

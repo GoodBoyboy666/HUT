@@ -37,7 +37,7 @@ androidx-swiperefreshlayout = { module = "androidx.swiperefreshlayout:swiperefre
 compiler = { module = "com.github.bumptech.glide:compiler", version.ref = "compiler" }
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "compiler" }
 google-gson = { module = "com.google.code.gson:gson", version.ref = "gsonVersion" }
-google-material-v150 = { module = "com.google.android.material:material", version.ref = "googleMaterial" }
+gradle = { module = "com.android.tools.build:gradle" }
 jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }

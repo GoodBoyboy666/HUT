@@ -45,6 +45,16 @@
             android:layout_marginBottom="5dp"
             android:text="@string/no_more_reminders" />
 
+        <Button
+            android:id="@+id/dialog_ignore_the_version"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="5dp"
+            android:text="@string/Ignore_the_version" />
+
         <View
             android:layout_width="0dp"
             android:layout_height="0dp"
