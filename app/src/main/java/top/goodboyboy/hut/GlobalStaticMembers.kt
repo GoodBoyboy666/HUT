@@ -9,6 +9,6 @@ class GlobalStaticMembers {
         const val backupAPI = "http://jwxt.hut.edu.cn:83/"
         val jwxtAPI = listOf(mainAPI, backupAPI)
         var apiSelected = 0
-        var VersionName = "1.2.8"
+        var VersionName = "1.2.9"
     }
 }
