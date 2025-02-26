@@ -7,7 +7,10 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -29,9 +32,14 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
+        enableEdgeToEdge()
         val view = binding.root
         setContentView(view)
-
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(0, systemBars.top, systemBars.right, 0)
+            insets
+        }
         var pageBackground = R.drawable.hut_main_kb_background
         var buttonBackground = R.drawable.hut_getkb_button
         val isDarkMode = KbFunction.checkDarkMode(this)
@@ -73,8 +81,8 @@ class LoginActivity : AppCompatActivity() {
                     try {
                         val status = CheckUpdate.getLatestVersionFromGitea()
                         withContext(Dispatchers.Main) {
-                            if (status.isSuccess) {
-                                AlertDialogUtil(
+                            if (status.isSuccess && status.versionInfo?.verName != setting.globalSettings.ignoreVersion) {
+                                val alert = AlertDialogUtil(
                                     this@LoginActivity,
                                     "检测到新版本" + " " + status.versionInfo?.verName,
                                     status.versionInfo?.verBody ?: "未获取到更新说明",
@@ -90,7 +98,13 @@ class LoginActivity : AppCompatActivity() {
                                         )
                                     )
                                     startActivity(intent)
-                                }.show()
+                                }
+                                alert.onClickIgnoreTheVersionButton = {
+                                    setting.globalSettings.ignoreVersion =
+                                        status.versionInfo?.verName ?: "未知版本号"
+                                    setting.save()
+                                }
+                                alert.show()
                             }
                         }
                     } catch (_: Exception) {
