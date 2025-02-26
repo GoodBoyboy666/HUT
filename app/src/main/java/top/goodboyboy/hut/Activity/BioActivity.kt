@@ -1,6 +1,7 @@
 package top.goodboyboy.hut.Activity
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -10,6 +11,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.google.android.material.color.MaterialColors
 import top.goodboyboy.hut.KbFunction
 import top.goodboyboy.hut.R
 import top.goodboyboy.hut.Util.BioUtil
@@ -22,11 +24,14 @@ class BioActivity : AppCompatActivity() {
         enableEdgeToEdge()
         binding = ActivityBioBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0)
             insets
         }
+        val colorPrimaryContainer= MaterialColors.getColor(this, com.google.android.material.R.attr.colorPrimaryContainer,
+            Color.WHITE)
+        window.statusBarColor = colorPrimaryContainer
 
         //构建生物验证Prompt
         val executor = ContextCompat.getMainExecutor(this)
