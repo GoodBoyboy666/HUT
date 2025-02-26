@@ -8,7 +8,9 @@ data class SettingsClass(
     var accessToken: String = "",
     var isLogin: Boolean = false,
     var enableBio: Boolean = false,
-    var noMoreReminders: Boolean = false
+    var noMoreReminders: Boolean = false,
+    var ignoreVersion: String = "",
+    var selectedZhouCi: Int = -1
 )
 
 data class UserInfoClass(

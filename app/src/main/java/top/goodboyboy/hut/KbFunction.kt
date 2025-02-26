@@ -444,7 +444,7 @@ class KbFunction {
                             val infoNodes = li.select("div.qz-hasCourse-detaillists > div")
                             course.infos = infoNodes.joinToString("\n") { it.text().trim() }
                         } else if (head != null) {
-                            course.title = head.text().trim() + "\n"
+                            course.title = head.text().trim()
                             course.infos = course.title +
                                     (cell.selectFirst("div > div.index-detailtext")?.text()?.trim()
                                         ?: "") + "\n" +

@@ -20,6 +20,7 @@ import top.goodboyboy.hut.KbFunction
 import top.goodboyboy.hut.Adapter.KbHeaderAdapter
 import top.goodboyboy.hut.Adapter.SpinnerAdapter
 import top.goodboyboy.hut.KbItemsAsList
+import top.goodboyboy.hut.Util.SettingsUtil
 import top.goodboyboy.hut.databinding.FragmentKbBinding
 
 class FragmentKb : Fragment() {
@@ -91,6 +92,9 @@ class FragmentKb : Fragment() {
                 val selectedItem = parent?.getItemAtPosition(position) as String
                 mainActivityPageViewModel.zhouciSelected = selectedItem
                 mainActivityPageViewModel.zhouciSelectedIndex = position
+                val setting = SettingsUtil(requireContext())
+                setting.globalSettings.selectedZhouCi = position + 1
+                setting.save()
 //                loadKb(userNum, userPasswd)
                 loadKb()
             }

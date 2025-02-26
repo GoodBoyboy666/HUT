@@ -47,4 +47,5 @@
     <string name="frequently_used_tools">常用工具</string>
     <string name="no_more_reminders">不再提醒</string>
     <string name="service_item_text">功能项</string>
+    <string name="Ignore_the_version">忽略该版本</string>
 </resources>
