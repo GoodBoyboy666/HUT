@@ -52,10 +52,11 @@ class SettingsFragment : PreferenceFragmentCompat() {
         }
 
         findPreference<Preference>("check_new")?.setOnPreferenceClickListener {
-            if (setting.globalSettings.noMoreReminders) {
-                setting.globalSettings.noMoreReminders = false
-                setting.save()
-            }
+
+            setting.globalSettings.noMoreReminders = false
+            setting.globalSettings.ignoreVersion = ""
+            setting.save()
+
             CoroutineScope(Dispatchers.IO).launch {
                 try {
                     val status = CheckUpdate.getLatestVersionFromGitea()

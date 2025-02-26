@@ -82,6 +82,7 @@ class AlertDialogUtil(
                 ignoreButton.visibility = View.VISIBLE
                 ignoreButton.setOnClickListener {
                     onClickIgnoreTheVersionButton?.invoke()
+                    alertDialog.dismiss()
                 }
             }
         }
